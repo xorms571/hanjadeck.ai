@@ -2,7 +2,7 @@ import Image from "next/image"
 
 export default function LoginPage () {
     return (
-        <div className="flex flex-col gap-6 justify-center items-center font-bold mt-24">
+        <div className="flex flex-col gap-6 justify-center items-center font-bold">
             <h3 className="text-[64px]">Hello there!</h3>
             <Image src="/login.svg" alt="Login Image" width={360} height={360} className="mb-7" />
             <button className="bg-[#5A1BD1CC]/80 w-full max-w-[480px] h-[58px] text-white rounded-[180px]" >Get started</button>
