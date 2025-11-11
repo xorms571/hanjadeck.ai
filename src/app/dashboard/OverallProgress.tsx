@@ -1,6 +1,6 @@
-import { goal, learned } from "@/mockup/mockup-data";
-
+import { userData } from "@/mockup/mockup-data";
 export default function OverallProgress() {
+    const { learned, goal } = userData
     const progressPercentage = (learned / goal) * 100;
     const nextGoalPercentage = 100 - progressPercentage;
     return (

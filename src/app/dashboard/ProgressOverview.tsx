@@ -1,18 +1,25 @@
-import { dashboardMockUpData1 } from "@/mockup/mockup-data";
-import Container from "@/app/components/Container";
 import Image from "next/image";
+import Container from "../components/Container";
+import { progressMeta } from "@/types/progress";
+import { userData } from "@/mockup/mockup-data";
+
 export default function ProgressOverview() {
+    const progress = userData.progress
     return (
-        dashboardMockUpData1.map((item, index) => (
-            <li key={index}>
-                <Container className="flex gap-4 items-center">
-                    <Image src={item.icon} width={68} height={68} alt={item.alt} />
-                    <div className="truncate">
-                        <span className="text-[#474141]">{item.title}</span>
-                        <h3>{item.value} {item.title === 'Study Streak' ? 'days' : 'hanja'}</h3>
-                    </div>
-                </Container>
-            </li>
-        ))
+        <>
+            {progressMeta.map((item) => (
+                <li key={item.key}>
+                    <Container className="flex gap-4 items-center">
+                        <Image src={item.icon} alt={item.alt} width={68} height={68} />
+                        <div className="truncate">
+                            <span className="text-[#474141]">{item.title}</span>
+                            <h3 className={progress ? "" : "animate-pulse"}>{progress[item.key]} {" "}
+                                {item.key === 'streak' ? 'days' : 'hanja'}
+                            </h3>
+                        </div>
+                    </Container>
+                </li>
+            ))}
+        </>
     )
 }
