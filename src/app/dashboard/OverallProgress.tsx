@@ -1,9 +1,6 @@
-interface OverallProgressProps {
-    learned: number;
-    goal: number;
-}
+import { goal, learned } from "@/mockup/mockup-data";
 
-export default function OverallProgress({ learned, goal }: OverallProgressProps) {
+export default function OverallProgress() {
     const progressPercentage = (learned / goal) * 100;
     const nextGoalPercentage = 100 - progressPercentage;
     return (
