@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Albert_Sans } from "next/font/google";
-import "./globals.css";
+import "./style/globals.css";
 import Header from "./components/Header";
 
 const alvertSans = Albert_Sans({
