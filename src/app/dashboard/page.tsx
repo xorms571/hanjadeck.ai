@@ -16,7 +16,7 @@ export default function DashboardPage() {
                         <ProgressOverview />
                     </ul>
                 </div>
-                <Container className="flex flex-col items-center gap-8">
+                <Container className="flex flex-col items-center gap-8" shadow>
                     <UserProfilePicture />
                     <Container className="border-[#D9D9D9] border flex flex-col gap-4">
                         <h3>Overall Progress</h3>

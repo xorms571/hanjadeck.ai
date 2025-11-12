@@ -4,8 +4,9 @@ import Image from "next/image"
 import { useState } from "react";
 import { userData } from "@/mockup/mockup-data"
 import { currentCard } from "@/types/card"
+import Container from "@/app/components/Container";
 
-export default function Card({ paramsId, currentCard }: { paramsId: string, currentCard: currentCard }) {
+export default function DetailCard({ paramsId, currentCard }: { paramsId: string, currentCard: currentCard }) {
 
     const { progress } = userData //사용자 데이터에서 진행 상황 가져오기
     const { bookmark } = progress //북마크된 카드 ID 배열 가져오기
@@ -32,7 +33,7 @@ export default function Card({ paramsId, currentCard }: { paramsId: string, curr
     const altText = isBookmarked ? "bookmarked card" : "unmarked card"
 
     return (
-        <div className="w-full flex flex-col items-center gap-4 bg-(--secondary-white) px-8 py-6 rounded-[20px] shadow-lg">
+        <Container className="w-full flex flex-col items-center gap-4 px-8 py-6" shadow>
             <div className="text-end w-full h-12">
                 <button onClick={handleBookmarkToggle}>
                     <Image src={imageSrc} width={48} height={48} alt={altText} />
@@ -49,6 +50,6 @@ export default function Card({ paramsId, currentCard }: { paramsId: string, curr
                     ))}
                 </ul>
             </div>
-        </div>
+        </Container>
     )
 }

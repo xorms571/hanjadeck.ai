@@ -9,7 +9,7 @@ export default function ProgressOverview() {
         <>
             {progressMeta.map((item) => (
                 <li key={item.key}>
-                    <Container className="flex gap-4 items-center">
+                    <Container className="flex gap-4 items-center" shadow>
                         <Image src={item.icon} alt={item.alt} width={68} height={68} />
                         <div className="truncate">
                             <span className="text-[#474141]">{item.title}</span>

@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { CircleArrowIcon } from "./CircleArrowIcon";
 import { mockupCards } from "@/mockup/mockup-data";
-import Card from "./Card";
+import DetailCard from "./DetailCard";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
 
@@ -49,7 +49,7 @@ export default function CardPage() {
         <div className="max-w-[796px] mx-auto">
             <ProcessBar background="secondary" number={progressPercentage} />
             <p className="text-end my-4">{`${currentIndex} of ${total}`}</p>
-            <Card paramsId={paramsId} currentCard={currentCard} />
+            <DetailCard paramsId={paramsId} currentCard={currentCard} />
             <div className="max-w-[536px] mt-[72px] mx-auto flex gap-14">
                 <Button
                     onClick={handlePrevious}
