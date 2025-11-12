@@ -1,13 +1,14 @@
 import Image from "next/image";
 import Container from "@/app/components/Container";
 import ProgressOverview from "./ProgressOverview";
-import ProgressContainer from "./ProgressContainer";
 import GreetingWithUserName from "./GreetingWithUserName";
+import UserProfilePicture from "./UserProfilePicture";
+import OverallProgress from "./OverallProgress";
 
-export default function Dashboard() {
+export default function DashboardPage() {
     return (
-        <div className="min-h-dvh max-w-[630px] lg:max-w-max mx-auto">
-            <GreetingWithUserName/>
+        <div className="max-w-[630px] lg:max-w-max mx-auto">
+            <GreetingWithUserName />
             <div className="grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 gap-6">
                 <div>
                     <Image src='/dashboard.svg' width={630} height={393} alt="dashboard image" />
@@ -16,7 +17,11 @@ export default function Dashboard() {
                     </ul>
                 </div>
                 <Container className="flex flex-col items-center gap-8">
-                    <ProgressContainer />
+                    <UserProfilePicture />
+                    <Container className="border-[#D9D9D9] border flex flex-col gap-4">
+                        <h3>Overall Progress</h3>
+                        <OverallProgress />
+                    </Container>
                 </Container >
             </div>
         </div>

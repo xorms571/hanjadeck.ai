@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Container from "../components/Container";
+import Container from "@/app/components/Container";
 import { progressMeta } from "@/types/progress";
 import { userData } from "@/mockup/mockup-data";
 

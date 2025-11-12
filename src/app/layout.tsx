@@ -24,7 +24,7 @@ export default function RootLayout({
         className={`${alvertSans.variable} antialiased p-6 max-w-[1228px] m-auto`}
       >
         <Header/>
-        {children}
+        <main className="min-h-dvh mb-20">{children}</main>
       </body>
     </html>
   );
