@@ -4,7 +4,8 @@ import { useState } from "react";
 import { mockupCards } from "@/mockup/mockup-data";
 import Input from "@/app/components/Input";
 import NoResult from "./NoResult";
-import FlipCard from "./FlipCard";
+import Link from "next/link";
+import Container from "../components/Container";
 
 export default function Searching() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -21,8 +22,12 @@ export default function Searching() {
         ) : (
             <ul className="flex flex-wrap gap-4">
                 {filteredCards.map((card) => (
-                    <li key={card.id} className="text-[32px] w-full md:w-[calc(50%-8px)] lg:w-[calc(25%-12px)] rounded-[20px] h-[232px]">
-                        <FlipCard id={card.id} character={card.character} korean={card.korean} english={card.english} width="100%" height="100%"/>
+                    <li key={card.id} className="text-[32px] w-full md:w-[calc(50%-8px)] lg:w-[calc(25%-12px)] h-[232px]">
+                        <Container className="h-full font-bold shadow! rounded-[20px]!">
+                            <Link className="w-full h-full flex justify-center items-center" href={`learn/${card.id}`}>
+                                {card.korean}
+                            </Link>
+                        </Container>
                     </li>
                 ))}
             </ul>

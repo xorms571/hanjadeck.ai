@@ -3,9 +3,9 @@
 import { useParams, useRouter } from "next/navigation";
 import { CircleArrowIcon } from "./CircleArrowIcon";
 import { mockupCards } from "@/mockup/mockup-data";
-import DetailCard from "./DetailCard";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
+import FlipCard from "./FlipCard";
 
 export default function CardPage() {
 
@@ -43,26 +43,26 @@ export default function CardPage() {
         router.push(`/learn/${nextCardId}`);
     }
 
-    const baseButtonStyle = "leading-[72px] w-60! h-[72px] rounded-2xl! font-bold!"
+    const baseButtonStyle = "w-34! h-9! md:w-[240px]! md:h-[72px]! rounded-xl! md:rounded-2xl! font-bold! gap-2! md:gap-4!"
 
     return (
-        <div className="max-w-[796px] mx-auto">
+        <div className="max-w-md lg:max-w-[796px] mx-auto">
             <ProcessBar background="secondary" number={progressPercentage} />
             <p className="text-end my-4">{`${currentIndex} of ${total}`}</p>
-            <DetailCard paramsId={paramsId} currentCard={currentCard} />
-            <div className="max-w-[536px] mt-[72px] mx-auto flex gap-14">
+            <FlipCard currentCard={currentCard} />
+            <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
                 <Button
                     onClick={handlePrevious}
                     background="secondary"
                     className={`${baseButtonStyle} bg-(--secondary-cool)!`}
-                    icon={<CircleArrowIcon />}>
-                    Previous
+                    icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon /></div>}>
+                    <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Previous</p>
                 </Button>
                 <Button
                     onClick={handleNext}
-                    className={`${baseButtonStyle} flex-row-reverse!`}
-                    icon={<CircleArrowIcon direction="right" color="#F8F8F8" />}>
-                    Next
+                    className={`${baseButtonStyle} flex-row-reverse! leading-[72px]`}
+                    icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon direction="right" color="#F8F8F8" /></div>}>
+                    <p className="h-full leading-8 md:leading-[68px] text-(--secondary-white)! text-sm! md:text-2xl!">Next</p>
                 </Button>
             </div>
         </div>

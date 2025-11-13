@@ -1,10 +1,8 @@
 interface props {
-    size?: number;
     color?: "#17151A" | "#F8F8F8";
     direction?: "left" | "right";
 }
 export const CircleArrowIcon = ({
-    size = 40,
     color = "#17151A",
     direction = "left",
 }: props) => {
@@ -15,10 +13,7 @@ export const CircleArrowIcon = ({
 
     return (
         <svg
-            width={size}
-            height={size}
             viewBox="0 0 40 40"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg"
             style={{ color }}
         >
