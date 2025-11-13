@@ -5,7 +5,7 @@ import { CircleArrowIcon } from "./CircleArrowIcon";
 import { mockupCards } from "@/mockup/mockup-data";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
-import FlipCard from "./FlipCard";
+import FlipCard from "../../components/FlipCard";
 
 export default function CardPage() {
 
