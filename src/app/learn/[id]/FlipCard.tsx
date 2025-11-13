@@ -51,7 +51,7 @@ export default function FlipCard({ currentCard }: { currentCard: currentCard }) 
                             <Image src={imageSrc} fill alt={altText} />
                         </button>
                     </div>
-                    <h1 className="text-[96px] mt-1 md:mt-3">{character}</h1>
+                    <h1 className="text-[96px] mt-1.5 md:mt-3">{character}</h1>
                 </Container>
 
                 {/* Back Face */}
