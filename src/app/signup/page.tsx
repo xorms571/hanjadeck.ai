@@ -8,6 +8,7 @@ import Input from "../components/Input";
 import Link from "next/link";
 import LevelIcon from "./LevelIcon";
 import { useRouter } from "next/navigation";
+import BackgroundImage from "./BackgroundImage";
 
 interface SignUpProps {
     formData: any;
@@ -221,6 +222,7 @@ export default function SignUpPage() {
                 <h3 className="font-bold text-[22px]! md:text-[32px]! mb-12">{steps[step].title}</h3>
                 {steps[step].component}
             </div>
+            <BackgroundImage currentStep={step}/>
 
             {!isLastStep && (
                 <div className="flex gap-4 mt-6">
