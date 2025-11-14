@@ -11,6 +11,7 @@ export default function SvgPathAnimationCSS({ strokeWidth, color, zIndex = '-z-3
 
             path.style.strokeDasharray = String(length);
             path.style.strokeDashoffset = String(length);
+            path.style.visibility = 'visible';
 
             // 애니메이션 시작
             const timer = setTimeout(() => {
@@ -31,6 +32,7 @@ export default function SvgPathAnimationCSS({ strokeWidth, color, zIndex = '-z-3
                 stroke={color}
                 strokeWidth={strokeWidth}
                 fill="transparent"
+                style={{ visibility: 'hidden' }}
             />
         </svg>
     );

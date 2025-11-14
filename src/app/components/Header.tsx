@@ -15,14 +15,14 @@ export default function Header() {
     }, [pathname]);
 
     return (
-        <header className="mb-12 flex justify-between items-center font-bold">
-            <Link className="z-50" href='/'>
+        <header className="mb-12 z-152 flex justify-between items-center font-bold">
+            <Link className="z-152" href='/'>
                 <Image src='/logo-lg.svg' width={185} height={40} alt="logo"/>
             </Link>
 
             {/* Hamburger Menu Button */}
             <button
-                className="md:hidden z-50"
+                className="md:hidden z-152"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 aria-label="Toggle menu"
             >
@@ -32,7 +32,7 @@ export default function Header() {
             </button>
 
             {/* Navigation */}
-            <nav className={`${isMenuOpen ? 'flex pt-26! pb-6! pl-6! pr-8! text-sm! md:text-lg! md:p-0!' : 'hidden'} backdrop-blur-md flex-col-reverse absolute top-0 left-0 w-full shadow rounded-b-lg z-40 items-end gap-4 md:flex md:static md:flex-row md:w-auto md:bg-transparent md:shadow-none md:p-0 md:items-center md:gap-14`}>
+            <nav className={`${isMenuOpen ? 'flex pt-26! pb-6! pl-6! pr-8! text-sm! md:text-lg! md:p-0!' : 'hidden'} backdrop-blur-md z-151 flex-col-reverse absolute top-0 left-0 w-full shadow rounded-b-lg items-end gap-4 md:flex md:static md:flex-row md:w-auto md:bg-transparent md:shadow-none md:p-0 md:items-center md:gap-14`}>
                 <Link href='/dashboard' className="w-full text-right md:w-auto leading-7">Dashboard</Link>
                 <Link href='/learn' className="w-full text-right md:w-auto leading-7">Study</Link>
                 <Link href='/profile' className="w-full flex justify-end md:w-auto">
