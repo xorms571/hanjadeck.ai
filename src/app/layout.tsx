@@ -20,13 +20,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="overflow-x-hidden">
+    <html lang="en">
       <body
         className={`${alvertSans.variable} bg-right! bg-no-repeat! antialiased p-6 max-w-[1228px] m-auto`}
       >
         <BodyStyler/>
         <Header/>
-        <main className="min-h-dvh mb-20 overflow-hidden">{children}</main>
+        <main className="min-h-dvh mb-20">{children}</main>
       </body>
     </html>
   );
