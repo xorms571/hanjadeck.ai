@@ -37,14 +37,20 @@ body.signup-background {
   background: #2b1751;
 }
 
+@media (width<=1219px) {
+  .backgoundImage {
+    display: none;
+  }
+}
+
 @media (width>=768px) {
   body.signup-background header nav {
     color: var(--secondary-white);
   }
 }
 
-body.signup-background header > a > img,
-body.signup-background header > button > svg {
+body.signup-background header>a>img,
+body.signup-background header>button>svg {
   filter: invert(1);
 }
 
