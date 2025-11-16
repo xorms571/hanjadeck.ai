@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
-import type { Role, Card } from '@prisma/client'; // Import Card type
+import type { Role, Card } from '@prisma/client'; // Import Card type again
 
 // Define the type for the decoded JWT payload
 interface JwtPayload {
