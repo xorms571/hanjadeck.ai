@@ -3,7 +3,7 @@ import { getCurrentUser } from '@/lib/auth';
 import { getCardById, getCards } from '@/lib/cards'; // Import getCards and getTotalCardCount
 import CardDetailClient from './CardDetailClient';
 
-export default async function CardDetailPage({ params }: { params: { id: string } }) {
+export default async function CardDetailPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params; // Await params to unwrap it
 
     const user = await getCurrentUser();
