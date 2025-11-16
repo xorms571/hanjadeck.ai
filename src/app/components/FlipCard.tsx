@@ -1,33 +1,27 @@
 "use client";
 import { useState } from "react";
-import { currentCard } from "@/types/card";
-import { userData } from "@/mockup/mockup-data";
+import { CardWithBookmarkStatus } from "@/lib/cards"; // Import the extended Card type
 import Container from "@/app/components/Container";
 import Image from "next/image";
 
-export default function FlipCard({ currentCard }: { currentCard: currentCard }) {
+interface FlipCardProps {
+    card: CardWithBookmarkStatus;
+    onBookmarkToggle?: (cardId: string, isBookmarked: boolean) => void; // Make optional
+}
 
-    const { progress } = userData //사용자 데이터에서 진행 상황 가져오기
-    const { bookmark } = progress //북마크된 카드 ID 배열 가져오기
+export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
 
     const [flipped, setFlipped] = useState(false); //카드 뒤집기 상태 관리
-    const { character, korean, english, examples, id } = currentCard; //현재 카드 데이터
-    const [isBookmarked, setIsBookmarked] = useState(bookmark.includes(id)); //현재 카드가 북마크되었는지 여부 상태 관리
+    const { character, korean, english, examples, id } = card; //현재 카드 데이터
+    // Initialize isBookmarked state only if bookmarking is enabled
+    const [isBookmarked, setIsBookmarked] = useState(onBookmarkToggle ? card.isBookmarked : false);
 
     const handleBookmarkToggle = (e: React.MouseEvent) => {
         e.stopPropagation(); //카드 뒤집기 이벤트 방지
-        const newIsBookmarked = !isBookmarked; //북마크 상태 토글
-        setIsBookmarked(newIsBookmarked); //상태 업데이트
-
-        if (newIsBookmarked) { //북마크 추가
-            if (!bookmark.includes(id)) {
-                bookmark.push(id);
-            }
-        } else { //북마크 제거
-            const index = bookmark.indexOf(id);
-            if (index > -1) {
-                bookmark.splice(index, 1);
-            }
+        if (onBookmarkToggle) { // Only proceed if bookmarking is enabled
+            const newIsBookmarked = !isBookmarked; //북마크 상태 토글
+            setIsBookmarked(newIsBookmarked); //상태 업데이트
+            onBookmarkToggle(id, newIsBookmarked); //부모 컴포넌트에 북마크 상태 변경 알림
         }
     }
     const imageSrc = isBookmarked ? "/bookmarked.svg" : "/unmarked.svg"
@@ -47,9 +41,11 @@ export default function FlipCard({ currentCard }: { currentCard: currentCard }) 
                 {/* Front Face */}
                 <Container className={baseContainerStyle} shadow>
                     <div className="text-end w-full">
-                        <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
-                            <Image src={imageSrc} fill alt={altText} />
-                        </button>
+                        {onBookmarkToggle && ( // Conditionally render button
+                            <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
+                                <Image src={imageSrc} fill alt={altText} />
+                            </button>
+                        )}
                     </div>
                     <h1 className="text-[96px] mt-1.5 md:mt-3">{character}</h1>
                 </Container>
@@ -57,9 +53,11 @@ export default function FlipCard({ currentCard }: { currentCard: currentCard }) 
                 {/* Back Face */}
                 <Container className={`${baseContainerStyle} justify-between transform-[rotateY(180deg)]`} shadow>
                     <div className="text-end w-full">
-                        <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
-                            <Image src={imageSrc} fill alt={altText} />
-                        </button>
+                        {onBookmarkToggle && ( // Conditionally render button
+                            <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
+                                <Image src={imageSrc} fill alt={altText} />
+                            </button>
+                        )}
                     </div>
                     <h1 className="text-[96px]">{character}</h1>
                     <h2>{korean}</h2>

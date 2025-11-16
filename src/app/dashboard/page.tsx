@@ -7,6 +7,7 @@ import ProgressOverview from "./ProgressOverview";
 import UserProfilePicture from "./UserProfilePicture";
 import OverallProgress from "./OverallProgress";
 import DashboardHeader from "./DashboardHeader";
+import BookmarkedCardsList from "./BookmarkedCardsList"; // Import BookmarkedCardsList
 
 export default async function DashboardPage() {
     const user = await getCurrentUser();
@@ -16,6 +17,7 @@ export default async function DashboardPage() {
     }
 
     const totalCards = await getTotalCardCount(); // Fetch total card count
+    const bookmarkedCards = user.bookmarks.map(bookmark => bookmark.card); // Extract cards from bookmarks
 
     return (
         <div className="max-w-[630px] lg:max-w-max mx-auto">
@@ -32,6 +34,10 @@ export default async function DashboardPage() {
                     <Container className="border-[#D9D9D9] border flex flex-col gap-4">
                         <h3>Overall Progress</h3>
                         <OverallProgress user={user} totalCards={totalCards} />
+                    </Container>
+                    <Container className="border-[#D9D9D9] border flex flex-col gap-4 w-full">
+                        <h3>Bookmarked Cards</h3>
+                        <BookmarkedCardsList bookmarkedCards={bookmarkedCards} />
                     </Container>
                 </Container >
             </div>

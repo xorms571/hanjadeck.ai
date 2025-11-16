@@ -5,10 +5,10 @@ import { CircleArrowIcon } from "./CircleArrowIcon";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
 import FlipCard from "../../components/FlipCard";
-import { Card } from "@prisma/client"; // Import Card type
+import { CardWithBookmarkStatus } from "@/lib/cards"; // Import CardWithBookmarkStatus type
 
 interface CardDetailClientProps {
-    card: Card;
+    card: CardWithBookmarkStatus; // Use the extended type
     totalCards: number;
     allCardIds: string[]; // To handle navigation
 }
@@ -33,13 +33,31 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
         router.push(`/learn/${nextCardId}`);
     }
 
+    const onBookmarkToggle = async (cardId: string, isBookmarked: boolean) => {
+        const method = isBookmarked ? 'POST' : 'DELETE';
+        try {
+            const response = await fetch(`/api/cards/${cardId}/bookmark`, {
+                method: method,
+            });
+            if (response.ok) {
+                router.refresh(); // Re-fetch server data to update UI
+            } else {
+                console.error('Failed to toggle bookmark:', await response.text());
+                alert('Failed to update bookmark status.');
+            }
+        } catch (error) {
+            console.error('Error toggling bookmark:', error);
+            alert('An error occurred while updating bookmark status.');
+        }
+    };
+
     const baseButtonStyle = "w-34! h-9! md:w-[240px]! md:h-[72px]! rounded-xl! md:rounded-2xl! font-bold! gap-2! md:gap-4!"
 
     return (
         <div className="max-w-md lg:max-w-[796px] mx-auto">
             <ProcessBar background="secondary" number={progressPercentage} />
             <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
-            <FlipCard currentCard={card} />
+            <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} /> {/* Pass card and onBookmarkToggle */}
             <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
                 <Button
                     onClick={handlePrevious}

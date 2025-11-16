@@ -9,7 +9,7 @@ export default async function LearnPage() {
         redirect('/login');
     }
 
-    const cards = await getCards();
+    const cards = await getCards(user.id);
 
     return (
         <div className="relative">

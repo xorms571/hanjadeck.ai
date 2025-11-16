@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
-import { Role } from '@prisma/client';
+import { Role, Card } from '@prisma/client'; // Import Card type
 
 // Define the type for the decoded JWT payload
 interface JwtPayload {
@@ -19,6 +19,7 @@ export type User = {
     learnedCount: number;
     masteredCount: number;
     reviewCount: number;
+    bookmarks: { card: Card }[]; // Add bookmarked cards
 };
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -49,11 +50,16 @@ export async function getCurrentUser(): Promise<User | null> {
         learnedCount: true,
         masteredCount: true,
         reviewCount: true,
+        bookmarks: { // Include bookmarks and select the card within each
+            select: {
+                card: true,
+            },
+        },
       },
     });
 
     if (user) {
-        return user;
+        return user as User; // Cast to the updated User type
     }
 
     return null;

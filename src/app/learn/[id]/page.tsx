@@ -15,14 +15,14 @@ export default async function CardDetailPage({ params }: { params: { id: string 
         redirect('/learn'); // Redirect to the main learn page if ID is invalid
     }
 
-    const card = await getCardById(id);
+    const card = await getCardById(id, user.id);
     if (!card) {
         // Handle case where card is not found
         // Maybe redirect to /learn or a 404 page
         redirect('/learn'); // Redirect to the main learn page
     }
 
-    const allCards = await getCards(); // Fetch all cards to get their IDs for navigation
+    const allCards = await getCards(user.id); // Fetch all cards to get their IDs for navigation
     const allCardIds = allCards.map(c => c.id);
     const totalCards = allCards.length; // Or use getTotalCardCount() if preferred
 

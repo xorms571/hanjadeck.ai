@@ -1,6 +1,11 @@
 import prisma from '@/lib/prisma';
 import { Card } from '@prisma/client';
 
+// Define a new type that extends Card with bookmark status
+export type CardWithBookmarkStatus = Card & {
+    isBookmarked: boolean;
+};
+
 export async function getTotalCardCount(): Promise<number> {
     try {
         const count = await prisma.card.count();
@@ -11,26 +16,50 @@ export async function getTotalCardCount(): Promise<number> {
     }
 }
 
-export async function getCards(): Promise<Card[]> {
+export async function getCards(userId: string | undefined): Promise<CardWithBookmarkStatus[]> {
     try {
         const cards = await prisma.card.findMany({
             orderBy: {
                 createdAt: 'asc',
             },
+            include: {
+                bookmarkedBy: userId ? {
+                    where: { userId },
+                    select: { userId: true } // Only need to know if a bookmark exists
+                } : false,
+            }
         });
-        return cards;
+
+        return cards.map(card => ({
+            ...card,
+            isBookmarked: card.bookmarkedBy.length > 0,
+        }));
     } catch (error) {
         console.error("Failed to get cards:", error);
         return []; // Return empty array on error
     }
 }
 
-export async function getCardById(id: string): Promise<Card | null> {
+export async function getCardById(id: string, userId: string | undefined): Promise<CardWithBookmarkStatus | null> {
     try {
         const card = await prisma.card.findUnique({
             where: { id },
+            include: {
+                bookmarkedBy: userId ? {
+                    where: { userId },
+                    select: { userId: true }
+                } : false,
+            }
         });
-        return card;
+
+        if (!card) {
+            return null;
+        }
+
+        return {
+            ...card,
+            isBookmarked: card.bookmarkedBy.length > 0,
+        };
     } catch (error) {
         console.error(`Failed to get card with ID ${id}:`, error);
         return null; // Return null on error or if not found
