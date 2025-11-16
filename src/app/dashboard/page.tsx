@@ -17,7 +17,10 @@ export default async function DashboardPage() {
     }
 
     const totalCards = await getTotalCardCount(); // Fetch total card count
-    const bookmarkedCards = user.bookmarks.map(bookmark => bookmark.card); // Extract cards from bookmarks
+    const bookmarkedCards = user.bookmarks.map(bookmark => ({
+        ...bookmark.card,
+        isBookmarked: true,
+    })); // Extract cards from bookmarks
 
     return (
         <div className="max-w-[630px] lg:max-w-max mx-auto">

@@ -1,9 +1,9 @@
-import { Card } from '@prisma/client';
 import Container from '@/app/components/Container';
 import Link from 'next/link';
+import { CardWithBookmarkStatus } from '@/lib/cards';
 
 interface BookmarkedCardsListProps {
-  bookmarkedCards: Card[];
+  bookmarkedCards: CardWithBookmarkStatus[];
 }
 
 export default function BookmarkedCardsList({ bookmarkedCards }: BookmarkedCardsListProps) {
