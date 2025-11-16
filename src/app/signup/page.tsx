@@ -169,8 +169,6 @@ export default function SignUpPage() {
                 newErrors.email = 'Email is required.';
             } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
                 newErrors.email = 'Email is invalid.';
-            } else if (formData.email === 'test@test.com') {
-                newErrors.email = 'This email is already taken.';
             }
 
             if (!formData.password) {
@@ -198,9 +196,39 @@ export default function SignUpPage() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleNext = () => {
+    const handleNext = async () => {
         if (validate()) {
-            setStep((prev) => Math.min(prev + 1, steps.length - 1));
+            if (step === 0) {
+                try {
+                    const response = await fetch('/api/auth/signup', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            name: formData.fullName,
+                            email: formData.email,
+                            password: formData.password,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        setStep((prev) => Math.min(prev + 1, steps.length - 1));
+                    } else {
+                        const errorText = await response.text();
+                        if (response.status === 409) {
+                            setErrors({ email: 'This email is already taken.' });
+                        } else {
+                            alert(`Sign up failed: ${errorText}`);
+                        }
+                    }
+                } catch (error) {
+                    console.error('An unexpected error occurred:', error);
+                    alert('An unexpected error occurred. Please try again.');
+                }
+            } else {
+                setStep((prev) => Math.min(prev + 1, steps.length - 1));
+            }
         }
     };
 

@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Role enum to distinguish between user types
+enum Role {
+  USER
+  ADMIN
+}
+
+model Card {
+  id           String     @id @default(cuid())
+  character    String
+  korean       String
+  english      String
+  examples     String[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  bookmarkedBy Bookmark[]
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  // IMPORTANT: Always store a hashed password, not the raw password.
+  password      String
+  imageUrl      String?
+  role          Role     @default(USER)
+
+  streak        Int      @default(0)
+  learnedCount  Int      @default(0)
+  masteredCount Int      @default(0)
+  reviewCount   Int      @default(0)
+
+  createdAt     DateTime @default(now()) // Tracks sign-up time
+  updatedAt     DateTime @updatedAt
+
+  bookmarks Bookmark[]
+}
+
+model Bookmark {
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  card     Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId   String
+  assignedAt DateTime @default(now())
+
+  @@id([userId, cardId])
+}
