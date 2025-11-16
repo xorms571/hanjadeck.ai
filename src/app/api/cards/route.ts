@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getCurrentUser } from '@/lib/auth';
+import { getCards } from '@/lib/cards';
 
 export async function GET() {
   const user = await getCurrentUser();
@@ -8,5 +9,7 @@ export async function GET() {
     return new NextResponse('Unauthorized', { status: 401 });
   }
 
-  return NextResponse.json(user);
+  const cards = await getCards();
+
+  return NextResponse.json(cards);
 }

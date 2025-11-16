@@ -1,10 +1,24 @@
 import Image from "next/image";
 import Container from "@/app/components/Container";
 import { progressMeta } from "@/types/progress";
-import { userData } from "@/mockup/mockup-data";
+import { User } from "@/lib/auth"; // Assuming User type is exported from auth
 
-export default function ProgressOverview() {
-    const progress = userData.progress
+type ProgressData = {
+    streak: number;
+    learned: number;
+    mastered: number;
+    review: number;
+};
+
+export default function ProgressOverview({ user }: { user: User }) {
+    // Map the user object properties to the keys used by progressMeta
+    const progress: ProgressData = {
+        streak: user.streak,
+        learned: user.learnedCount,
+        mastered: user.masteredCount,
+        review: user.reviewCount,
+    };
+
     return (
         <>
             {progressMeta.map((item) => (

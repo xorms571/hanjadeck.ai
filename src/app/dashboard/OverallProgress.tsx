@@ -1,10 +1,12 @@
-import { mockupCards, userData } from "@/mockup/mockup-data";
 import ProcessBar from "../components/ProcessBar";
-export default function OverallProgress() {
-    const { learned } = userData //사용자 데이터에서 학습한 문자 수 가져오기
-    const goal = mockupCards.length; //전체 카드 수
-    const progressPercentage = (learned / goal) * 100; //진행률 백분율 계산
-    const nextGoalPercentage = 100 - progressPercentage; //다음 목표까지 남은 백분율 계산
+import { User } from "@/lib/auth"; // Import User type
+
+export default function OverallProgress({ user, totalCards }: { user: User, totalCards: number }) {
+    const learned = user.learnedCount; // Get learned count from user prop
+    const goal = totalCards; // Use totalCards prop
+    const progressPercentage = (learned / goal) * 100;
+    const nextGoalPercentage = 100 - progressPercentage;
+
     return (
         <>
             <p>Keep going! You’ve learned <span className="text-(--primary)">{learned}</span> out of the <span className="text-(--primary)">{goal}</span> characters to reach your next goal.</p>
