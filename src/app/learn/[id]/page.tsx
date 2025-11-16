@@ -1,70 +1,32 @@
-"use client";
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/lib/auth';
+import { getCardById, getCards, getTotalCardCount } from '@/lib/cards'; // Import getCards and getTotalCardCount
+import CardDetailClient from './CardDetailClient';
 
-import { useParams, useRouter } from "next/navigation";
-import { CircleArrowIcon } from "./CircleArrowIcon";
-import { mockupCards } from "@/mockup/mockup-data";
-import Button from "@/app/components/Button";
-import ProcessBar from "@/app/components/ProcessBar";
-import FlipCard from "../../components/FlipCard";
+export default async function CardDetailPage({ params }: { params: { id: string } }) {
+    const { id } = await params; // Await params to unwrap it
 
-export default function CardPage() {
-
-    const params = useParams();
-    const router = useRouter();
-
-    const total = mockupCards.length //전체 카드 갯수
-    const paramsId = params.id; //현재 카드 ID
-
-    if (typeof paramsId !== 'string') {
-        console.error("Invalid paramsId:", paramsId); //유효하지 않은 paramsId 오류 처리
-        return <div>Error: Invalid card ID.</div>;
+    const user = await getCurrentUser();
+    if (!user) {
+        redirect('/login');
     }
 
-    const currentCardIndex = mockupCards.findIndex(card => card.id === paramsId); //현재 카드 인덱스
-
-    if (currentCardIndex === -1) {
-        console.error("Card not found for ID:", paramsId); //카드가 없을 때 오류 처리
-        return <div>Error: Card not found.</div>;
+    if (!id || typeof id !== 'string') {
+        redirect('/learn'); // Redirect to the main learn page if ID is invalid
     }
 
-    const currentIndex = currentCardIndex + 1; //사용자에게 보여줄 현재 카드 번호
-    const progressPercentage = (currentIndex / total) * 100; //진행률 백분율
-    const currentCard = mockupCards[currentCardIndex]; //현재 카드 데이터
-
-    const handlePrevious = () => { //이전 카드로 이동
-        const prevIndex = (currentCardIndex - 1 + total) % total;
-        const prevCardId = mockupCards[prevIndex].id;
-        router.push(`/learn/${prevCardId}`);
-    };
-
-    const handleNext = () => { //다음 카드로 이동
-        const nextIndex = (currentCardIndex + 1) % total;
-        const nextCardId = mockupCards[nextIndex].id;
-        router.push(`/learn/${nextCardId}`);
+    const card = await getCardById(id);
+    if (!card) {
+        // Handle case where card is not found
+        // Maybe redirect to /learn or a 404 page
+        redirect('/learn'); // Redirect to the main learn page
     }
 
-    const baseButtonStyle = "w-34! h-9! md:w-[240px]! md:h-[72px]! rounded-xl! md:rounded-2xl! font-bold! gap-2! md:gap-4!"
+    const allCards = await getCards(); // Fetch all cards to get their IDs for navigation
+    const allCardIds = allCards.map(c => c.id);
+    const totalCards = allCards.length; // Or use getTotalCardCount() if preferred
 
     return (
-        <div className="max-w-md lg:max-w-[796px] mx-auto">
-            <ProcessBar background="secondary" number={progressPercentage} />
-            <p className="text-end my-4">{`${currentIndex} of ${total}`}</p>
-            <FlipCard currentCard={currentCard} />
-            <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
-                <Button
-                    onClick={handlePrevious}
-                    background="secondary"
-                    className={`${baseButtonStyle} bg-(--secondary-cool)!`}
-                    icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon /></div>}>
-                    <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Previous</p>
-                </Button>
-                <Button
-                    onClick={handleNext}
-                    className={`${baseButtonStyle} flex-row-reverse! leading-[72px]`}
-                    icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon direction="right" color="#F8F8F8" /></div>}>
-                    <p className="h-full leading-8 md:leading-[68px] text-(--secondary-white)! text-sm! md:text-2xl!">Next</p>
-                </Button>
-            </div>
-        </div>
-    )
+        <CardDetailClient card={card} totalCards={totalCards} allCardIds={allCardIds} />
+    );
 }

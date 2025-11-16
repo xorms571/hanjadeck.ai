@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { mockupCards } from "@/mockup/mockup-data";
+import { Card } from "@prisma/client"; // Import the Card type
 import Input from "@/app/components/Input";
 import NoResult from "./NoResult";
 import Link from "next/link";
 import Container from "../components/Container";
 
-export default function Searching() {
+export default function Searching({ initialCards }: { initialCards: Card[] }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const filteredCards = mockupCards.filter(card => //검색어가 카드의 어떤 필드에 포함되는지 확인
+    const filteredCards = initialCards.filter(card => // Filter from the passed props
         card.korean.toLowerCase().includes(searchTerm.toLowerCase()) ||
         card.character.toLowerCase().includes(searchTerm.toLowerCase()) ||
         card.english.toLowerCase().includes(searchTerm.toLowerCase())

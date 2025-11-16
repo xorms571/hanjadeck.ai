@@ -24,3 +24,15 @@ export async function getCards(): Promise<Card[]> {
         return []; // Return empty array on error
     }
 }
+
+export async function getCardById(id: string): Promise<Card | null> {
+    try {
+        const card = await prisma.card.findUnique({
+            where: { id },
+        });
+        return card;
+    } catch (error) {
+        console.error(`Failed to get card with ID ${id}:`, error);
+        return null; // Return null on error or if not found
+    }
+}

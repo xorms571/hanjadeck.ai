@@ -1,10 +1,20 @@
+import { redirect } from 'next/navigation';
+import { getCurrentUser } from '@/lib/auth';
+import { getCards } from '@/lib/cards';
 import Searching from "./Searching";
 
-export default function LearnPage() {
+export default async function LearnPage() {
+    const user = await getCurrentUser();
+    if (!user) {
+        redirect('/login');
+    }
+
+    const cards = await getCards();
+
     return (
         <div className="relative">
             <h2 className="mb-6 text-[28px]! lg:text-[64px]!">Find or create a flashcard</h2>
-            <Searching />
+            <Searching initialCards={cards} />
         </div>
     )
 }

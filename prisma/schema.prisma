@@ -19,7 +19,7 @@ enum Role {
 
 model Card {
   id           String     @id @default(cuid())
-  character    String
+  character    String     @unique
   korean       String
   english      String
   examples     String[]
