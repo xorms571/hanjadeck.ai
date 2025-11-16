@@ -32,7 +32,7 @@ export async function getCards(userId: string | undefined): Promise<CardWithBook
 
         return cards.map(card => ({
             ...card,
-            isBookmarked: card.bookmarkedBy.length > 0,
+            isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
         }));
     } catch (error) {
         console.error("Failed to get cards:", error);
@@ -58,7 +58,7 @@ export async function getCardById(id: string, userId: string | undefined): Promi
 
         return {
             ...card,
-            isBookmarked: card.bookmarkedBy.length > 0,
+            isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
         };
     } catch (error) {
         console.error(`Failed to get card with ID ${id}:`, error);

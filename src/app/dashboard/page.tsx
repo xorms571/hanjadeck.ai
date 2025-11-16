@@ -6,8 +6,8 @@ import Container from "@/app/components/Container";
 import ProgressOverview from "./ProgressOverview";
 import UserProfilePicture from "./UserProfilePicture";
 import OverallProgress from "./OverallProgress";
-import DashboardHeader from "./DashboardHeader";
 import BookmarkedCardsList from "./BookmarkedCardsList"; // Import BookmarkedCardsList
+import GreetingWithUserName from "./GreetingWithUserName";
 
 export default async function DashboardPage() {
     const user = await getCurrentUser();
@@ -21,7 +21,7 @@ export default async function DashboardPage() {
 
     return (
         <div className="max-w-[630px] lg:max-w-max mx-auto">
-            <DashboardHeader user={user} />
+            <GreetingWithUserName name={user.name} />
             <div className="grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 gap-6">
                 <div>
                     <Image src='/dashboard.svg' width={630} height={393} alt="dashboard image" />

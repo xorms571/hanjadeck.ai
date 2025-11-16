@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import LogoutButton from "./LogoutButton";
+import { User } from "@/lib/auth";
 
-export default function Header() {
+export default function Header({ user }: { user: User | null }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const pathname = usePathname();
 
@@ -17,7 +19,7 @@ export default function Header() {
     return (
         <header className="mb-12 z-152 flex justify-between items-center font-bold">
             <Link className="z-152" href='/'>
-                <Image src='/logo-lg.svg' width={185} height={40} alt="logo"/>
+                <Image src='/logo-lg.svg' width={185} height={40} alt="logo" />
             </Link>
 
             {/* Hamburger Menu Button */}
@@ -32,13 +34,15 @@ export default function Header() {
             </button>
 
             {/* Navigation */}
-            <nav className={`${isMenuOpen ? 'flex pt-26! pb-6! pl-6! pr-8! text-sm! md:text-lg! md:p-0!' : 'hidden'} backdrop-blur-md z-151 flex-col-reverse absolute top-0 left-0 w-full shadow rounded-b-lg items-end gap-4 md:flex md:static md:flex-row md:w-auto md:bg-transparent md:shadow-none md:p-0 md:items-center md:gap-14`}>
-                <Link href='/dashboard' className="w-full text-right md:w-auto leading-7">Dashboard</Link>
-                <Link href='/signup' className="w-full text-right md:w-auto leading-7">Sign Up</Link>
-                <Link href='/learn' className="w-full text-right md:w-auto leading-7">Study</Link>
-                <Link href='/profile' className="w-full flex justify-end md:w-auto">
-                    <Image src='/login.svg' width={40} height={40} alt="profile image"/>
-                </Link>
+            <nav className={`${isMenuOpen ? 'flex pt-26! pb-6! pl-6! pr-8! text-sm! md:text-lg! md:p-0!' : 'hidden'} w-full items-end justify-end backdrop-blur-md z-151 flex-col-reverse absolute top-0 left-0 shadow rounded-b-lg gap-4 md:flex md:static md:flex-row md:bg-transparent md:shadow-none md:p-0 md:items-center md:gap-14`}>
+                <Link href='/learn' className="text-right leading-7">Study</Link>
+                <Link href='/dashboard' className="text-right leading-7">Dashboard</Link>
+                {!user && <Link href='/signup' className="text-right leading-7">Sign Up</Link>}
+                {!user && <Link href='/login' className="text-right leading-7">Login</Link>}
+                {user && <LogoutButton />}
+                {user && <Link href='/dashboard' className="flex justify-end">
+                    <Image src='/login.svg' width={40} height={40} alt="profile image" />
+                </Link>}
             </nav>
         </header>
     )

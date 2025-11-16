@@ -33,7 +33,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
         router.push(`/learn/${nextCardId}`);
     }
 
-    const onBookmarkToggle = async (cardId: string, isBookmarked: boolean) => {
+    const onBookmarkToggle = async (cardId: string, isBookmarked: boolean): Promise<boolean> => {
         const method = isBookmarked ? 'POST' : 'DELETE';
         try {
             const response = await fetch(`/api/cards/${cardId}/bookmark`, {
@@ -41,13 +41,23 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
             });
             if (response.ok) {
                 router.refresh(); // Re-fetch server data to update UI
+                return true; // Indicate success
             } else {
+                if (response.status === 401) {
+                    const confirmRedirect = confirm('You need to log in to bookmark. Would you like to go to the login page?');
+                    if (confirmRedirect) {
+                        router.push('/login');
+                    }
+                    return false; // Indicate failure (even if redirect is confirmed, the bookmark action itself failed)
+                }
                 console.error('Failed to toggle bookmark:', await response.text());
                 alert('Failed to update bookmark status.');
+                return false; // Indicate failure
             }
         } catch (error) {
             console.error('Error toggling bookmark:', error);
             alert('An error occurred while updating bookmark status.');
+            return false; // Indicate failure
         }
     };
 

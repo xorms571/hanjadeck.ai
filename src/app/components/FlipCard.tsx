@@ -6,7 +6,7 @@ import Image from "next/image";
 
 interface FlipCardProps {
     card: CardWithBookmarkStatus;
-    onBookmarkToggle?: (cardId: string, isBookmarked: boolean) => void; // Make optional
+    onBookmarkToggle?: (cardId: string, isBookmarked: boolean) => Promise<boolean>; // Make optional and update return type
 }
 
 export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
@@ -16,12 +16,14 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
     // Initialize isBookmarked state only if bookmarking is enabled
     const [isBookmarked, setIsBookmarked] = useState(onBookmarkToggle ? card.isBookmarked : false);
 
-    const handleBookmarkToggle = (e: React.MouseEvent) => {
+    const handleBookmarkToggle = async (e: React.MouseEvent) => {
         e.stopPropagation(); //카드 뒤집기 이벤트 방지
         if (onBookmarkToggle) { // Only proceed if bookmarking is enabled
             const newIsBookmarked = !isBookmarked; //북마크 상태 토글
-            setIsBookmarked(newIsBookmarked); //상태 업데이트
-            onBookmarkToggle(id, newIsBookmarked); //부모 컴포넌트에 북마크 상태 변경 알림
+            const success = await onBookmarkToggle(id, newIsBookmarked); //부모 컴포넌트에 북마크 상태 변경 알림
+            if (success) {
+                setIsBookmarked(newIsBookmarked); //상태 업데이트
+            }
         }
     }
     const imageSrc = isBookmarked ? "/bookmarked.svg" : "/unmarked.svg"

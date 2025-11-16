@@ -1,15 +1,11 @@
-import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
 import { getCards } from '@/lib/cards';
 import Searching from "./Searching";
 
 export default async function LearnPage() {
     const user = await getCurrentUser();
-    if (!user) {
-        redirect('/login');
-    }
 
-    const cards = await getCards(user.id);
+    const cards = await getCards(user?.id);
 
     return (
         <div className="relative">
