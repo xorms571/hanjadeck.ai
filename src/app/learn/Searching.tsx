@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@prisma/client"; // Import the Card type
 import Input from "@/app/components/Input";
 import NoResult from "./NoResult";
 import Link from "next/link";
 import Container from "../components/Container";
+import { CardWithBookmarkStatus } from "@/lib/cards";
 
-export default function Searching({ initialCards }: { initialCards: Card[] }) {
+export default function Searching({ initialCards }: { initialCards: CardWithBookmarkStatus[] }) {
     const [searchTerm, setSearchTerm] = useState('');
     const filteredCards = initialCards.filter(card => // Filter from the passed props
         card.korean.toLowerCase().includes(searchTerm.toLowerCase()) ||
