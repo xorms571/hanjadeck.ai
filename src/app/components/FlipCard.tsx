@@ -67,7 +67,7 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                     <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base">
                         <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
                         <ul className="bg-(--neutrals-white) px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4">
-                            {examples.map((example: string, index) => (
+                            {examples.map((example: string, index: number) => (
                                 <li className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`} key={index}>{example}</li>
                             ))}
                         </ul>
