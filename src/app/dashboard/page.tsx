@@ -4,7 +4,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { getTotalCardCount } from "@/lib/cards"; // Import getTotalCardCount
 import Container from "@/app/components/Container";
 import ProgressOverview from "./ProgressOverview";
-import UserProfilePicture from "./UserProfilePicture";
+import UserProfilePicture from "../components/UserProfilePicture";
 import OverallProgress from "./OverallProgress";
 import BookmarkedCardsList from "./BookmarkedCardsList"; // Import BookmarkedCardsList
 import GreetingWithUserName from "./GreetingWithUserName";
@@ -22,7 +22,7 @@ export default async function DashboardPage() {
     return (
         <div className="max-w-[630px] lg:max-w-max mx-auto">
             <GreetingWithUserName name={user.name} />
-            <div className="grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 gap-6">
+            <div className="flex flex-col lg:grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 gap-6">
                 <div>
                     <Image src='/dashboard.svg' width={630} height={393} alt="dashboard image" />
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">

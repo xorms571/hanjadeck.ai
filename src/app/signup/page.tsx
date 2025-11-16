@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/app/components/Button";
 import Container from "../components/Container";
 import Input from "../components/Input";
-import Link from "next/link";
 import LevelIcon from "./LevelIcon";
-import { useRouter } from "next/navigation";
-import BackgroundImage from "./BackgroundImage";
+import BackgroundImage from "../components/BackgroundImage";
 
 interface SignUpProps {
     formData: any;
@@ -59,9 +59,6 @@ function SignUp({ formData, setFormData, errors }: SignUpProps) {
                 onChange={handleChange}
                 error={errors.verifyPassword}
             />
-            <p className="text-sm font-normal text-center mt-4 text-gray-600">
-                Already have an account? <Link href='/login' className="text-(--primary) hover:underline">Log in</Link>
-            </p>
         </form>
     );
 }
@@ -250,14 +247,18 @@ export default function SignUpPage() {
                 <h3 className="font-bold text-[22px]! md:text-[32px]! mb-12">{steps[step].title}</h3>
                 {steps[step].component}
             </div>
-            <BackgroundImage currentStep={step}/>
+            <BackgroundImage currentStep={step} />
 
             {!isLastStep && (
-                <div className="flex gap-4 mt-6">
+                <div className={`flex ${step === 0 ? "flex-col" : "gap-4"}`}>
+                    {step === 0 &&
+                        <p className="text-sm font-normal text-center mt-4 text-gray-600">
+                            Already have an account? <Link href='/login' className="text-(--primary) hover:underline">Log in</Link>
+                        </p>}
                     {step > 0 && (
                         <Button onClick={handleBack} className="w-full text-[16px] md:text-[22px] bg-gray-200 text-gray-700 hover:bg-gray-300">Back</Button>
                     )}
-                    <Button onClick={handleNext} className="w-full max-w-full text-[16px] md:text-[22px]">
+                    <Button onClick={handleNext} className="w-full mt-6 max-w-full text-[16px] md:text-[22px]">
                         {step === 0 ? 'Continue' : 'Next'}
                     </Button>
                 </div>

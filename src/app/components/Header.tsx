@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import LogoutButton from "./LogoutButton";
 import { User } from "@/lib/auth";
+import UserProfilePicture from "./UserProfilePicture";
 
 export default function Header({ user }: { user: User | null }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -40,9 +41,7 @@ export default function Header({ user }: { user: User | null }) {
                 {!user && <Link href='/signup' className="text-right leading-7">Sign Up</Link>}
                 {!user && <Link href='/login' className="text-right leading-7">Login</Link>}
                 {user && <LogoutButton />}
-                {user && <Link href='/dashboard' className="flex justify-end">
-                    <Image src='/login.svg' width={40} height={40} alt="profile image" />
-                </Link>}
+                {user && <UserProfilePicture imageUrl={user.imageUrl} size={40} />}
             </nav>
         </header>
     )

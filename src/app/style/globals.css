@@ -33,7 +33,7 @@ body {
   font-weight: medium;
 }
 
-body.signup-background {
+body.dark-background {
   background: #2b1751;
 }
 
@@ -44,13 +44,13 @@ body.signup-background {
 }
 
 @media (width>=768px) {
-  body.signup-background header nav {
+  body.dark-background header nav {
     color: var(--secondary-white);
   }
 }
 
-body.signup-background header>a>img,
-body.signup-background header>button>svg {
+body.dark-background header>a>img,
+body.dark-background header>button>svg {
   filter: invert(1);
 }
 
