@@ -1,7 +1,8 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
-import type { Role, Card } from '@prisma/client'; // Import Card type again
+import type { Role, Card } from '@prisma/client';
+import { updateUserStreak } from './user'; // Import updateUserStreak
 
 // Define the type for the decoded JWT payload
 interface JwtPayload {
@@ -19,7 +20,8 @@ export type User = {
     learnedCount: number;
     masteredCount: number;
     reviewCount: number;
-    bookmarks: { card: Card }[]; // Add bookmarked cards
+    lastSeenAt: Date | null; // Add lastSeenAt
+    bookmarks: { card: Card }[];
 };
 
 export async function getCurrentUser(): Promise<User | null> {
@@ -38,7 +40,7 @@ export async function getCurrentUser(): Promise<User | null> {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
-    const user = await prisma.user.findUnique({
+    let user = await prisma.user.findUnique({ // Use 'let' because we might update it
       where: { id: decoded.userId },
       select: {
         id: true,
@@ -50,7 +52,8 @@ export async function getCurrentUser(): Promise<User | null> {
         learnedCount: true,
         masteredCount: true,
         reviewCount: true,
-        bookmarks: { // Include bookmarks and select the card within each
+        lastSeenAt: true, // Select lastSeenAt
+        bookmarks: {
             select: {
                 card: true,
             },
@@ -59,13 +62,16 @@ export async function getCurrentUser(): Promise<User | null> {
     });
 
     if (user) {
-        return user as User; // Cast to the updated User type
+        // Update user streak and lastSeenAt
+        const streakInfo = await updateUserStreak(user); // Update the user object
+        user.streak = streakInfo.streak;
+        user.lastSeenAt = streakInfo.lastSeenAt;
+        return user as User;
     }
 
     return null;
 
   } catch (error) {
-    // Catches errors from jwt.verify (invalid token, expired)
     console.log('Authentication error:', error);
     return null;
   }

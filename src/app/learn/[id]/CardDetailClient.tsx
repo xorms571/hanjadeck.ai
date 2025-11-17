@@ -66,18 +66,38 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
     };
 
     const handleCardAction = async (known: boolean) => {
-        await api_toggleBookmark(card.id, known, handleUnauthorizedForCardAction);
-        const nextIndex = (currentCardIndex + 1) % totalCards;
-        const nextCardId = allCardIds[nextIndex];
-        router.push(`/learn/${nextCardId}`);
+        let success = true;
+        // Only call api_toggleBookmark if the bookmark status needs to change
+        if (card.isBookmarked !== known) {
+            success = await api_toggleBookmark(card.id, known, handleUnauthorizedForCardAction);
+        }
+
+        if (success) {
+            // Record interaction
+            try {
+                await fetch('/api/users/me/interactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cardId: card.id }),
+                });
+            } catch (error) {
+                console.error('Error recording card interaction:', error);
+                // Do not prevent navigation even if interaction recording fails
+            }
+
+            // Navigate to the next card
+            const nextIndex = (currentCardIndex + 1) % totalCards;
+            const nextCardId = allCardIds[nextIndex];
+            router.push(`/learn/${nextCardId}`);
+        }
     };
 
     const handlePrevious = () => {
-        handleCardAction(false);
+        handleCardAction(true);
     };
 
     const handleNext = () => {
-        handleCardAction(true);
+        handleCardAction(false);
     }
 
     const onBookmarkToggle = async (cardId: string, isBookmarked: boolean): Promise<boolean> => {
