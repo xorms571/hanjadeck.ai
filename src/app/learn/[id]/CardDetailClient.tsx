@@ -1,11 +1,11 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CircleArrowIcon } from "./CircleArrowIcon";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
 import FlipCard from "../../components/FlipCard";
 import { CardWithBookmarkStatus } from "@/lib/cards"; // Import CardWithBookmarkStatus type
+import Image from "next/image";
 
 interface CardDetailClientProps {
     card: CardWithBookmarkStatus; // Use the extended type
@@ -120,13 +120,13 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
                     onClick={handlePrevious}
                     background="secondary"
                     className={`${baseButtonStyle} bg-(--secondary-cool)!`}
-                    icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon /></div>}>
+                    icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/x.svg' alt="unknown icon" fill/></div>}>
                     <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Unknown</p>
                 </Button>
                 <Button
                     onClick={handleNext}
                     className={`${baseButtonStyle} flex-row-reverse! leading-[72px]`}
-                    icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon direction="right" color="#F8F8F8" /></div>}>
+                    icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/check.svg' alt="known icon" fill /></div>}>
                     <p className="h-full leading-8 md:leading-[68px] text-(--secondary-white)! text-sm! md:text-2xl!">Known</p>
                 </Button>
             </div>
