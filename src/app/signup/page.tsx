@@ -255,8 +255,8 @@ export default function SignUpPage() {
                         <p className="text-sm font-normal text-center mt-4 text-gray-600">
                             Already have an account? <Link href='/login' className="text-(--primary) hover:underline">Log in</Link>
                         </p>}
-                    {step > 0 && (
-                        <Button onClick={handleBack} className="w-full text-[16px] md:text-[22px] bg-gray-200 text-gray-700 hover:bg-gray-300">Back</Button>
+                    {step > 1 && (
+                        <Button onClick={handleBack} className="w-full mt-6 text-[16px] md:text-[22px] bg-gray-200 text-gray-700 hover:bg-gray-300">Back</Button>
                     )}
                     <Button onClick={handleNext} className="w-full mt-6 max-w-full text-[16px] md:text-[22px]">
                         {step === 0 ? 'Continue' : 'Next'}
