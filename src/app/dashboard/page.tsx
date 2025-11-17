@@ -29,9 +29,7 @@ export default async function DashboardPage() {
             <div className="flex flex-col lg:grid grid-rows-2 lg:grid-cols-2 lg:grid-rows-1 gap-6">
                 <div>
                     <Image src='/dashboard.svg' width={630} height={393} alt="dashboard image" />
-                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <ProgressOverview user={user} review={bookmarkedCards.length} />
-                    </ul>
+                    <ProgressOverview user={user} review={bookmarkedCards.length} />
                 </div>
                 <Container className="flex flex-col items-center gap-8" shadow>
                     <UserProfilePicture imageUrl={user.imageUrl} />
