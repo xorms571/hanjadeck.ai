@@ -1,6 +1,6 @@
-import Container from '@/app/components/Container';
 import Link from 'next/link';
 import { CardWithBookmarkStatus } from '@/lib/cards';
+import Image from 'next/image';
 
 interface BookmarkedCardsListProps {
   bookmarkedCards: CardWithBookmarkStatus[];
@@ -17,17 +17,16 @@ export default function BookmarkedCardsList({ bookmarkedCards }: BookmarkedCards
   }
 
   return (
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {bookmarkedCards.map((bookmark) => (
-          <li key={bookmark.id}>
-            <Link href={`/learn/${bookmark.id}`}>
-              <Container className="flex items-center justify-between p-4 shadow! rounded-[10px]! hover:bg-gray-50">
-                <span className="text-2xl font-bold">{bookmark.character}</span>
-                <span className="text-lg text-gray-600">{bookmark.korean}</span>
-              </Container>
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <ul className="grid grid-cols-1 gap-6">
+      {bookmarkedCards.map((bookmark) => (
+        <li className='flex items-center justify-between' key={bookmark.id}>
+          <span className="text-lg mb-1">{bookmark.character} {bookmark.korean}</span>
+          <Link className='flex max-w-[92px] justify-between items-center' href={`/learn/${bookmark.id}`}>
+            <span className='text-lg mb-1 mr-2'>Review</span>
+            <Image width={20} height={20} src='/review.svg' alt='review icon' />
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }

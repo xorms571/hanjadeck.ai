@@ -8,6 +8,7 @@ import UserProfilePicture from "../components/UserProfilePicture";
 import OverallProgress from "./OverallProgress";
 import BookmarkedCardsList from "./BookmarkedCardsList"; // Import BookmarkedCardsList
 import GreetingWithUserName from "./GreetingWithUserName";
+import Button from "../components/Button";
 
 export default async function DashboardPage() {
     const user = await getCurrentUser();
@@ -29,7 +30,7 @@ export default async function DashboardPage() {
                 <div>
                     <Image src='/dashboard.svg' width={630} height={393} alt="dashboard image" />
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <ProgressOverview user={user} />
+                        <ProgressOverview user={user} review={bookmarkedCards.length} />
                     </ul>
                 </div>
                 <Container className="flex flex-col items-center gap-8" shadow>
@@ -38,8 +39,13 @@ export default async function DashboardPage() {
                         <h3>Overall Progress</h3>
                         <OverallProgress user={user} totalCards={totalCards} />
                     </Container>
-                    <Container className="border-[#D9D9D9] border flex flex-col gap-4 w-full">
-                        <h3>Bookmarked Cards</h3>
+                    <Container className="border-[#D9D9D9] border flex flex-col gap-6 w-full">
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-[22px]!">Review Queue</h3>
+                            <Button type="button" disabled className="disabled:bg-(--primary)! max-w-24! max-h-[38px]! text-[18px]! font-bold">
+                                {bookmarkedCards.length} Cards
+                            </Button>
+                        </div>
                         <BookmarkedCardsList bookmarkedCards={bookmarkedCards} />
                     </Container>
                 </Container >

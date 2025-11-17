@@ -10,13 +10,13 @@ type ProgressData = {
     review: number;
 };
 
-export default function ProgressOverview({ user }: { user: User }) {
+export default function ProgressOverview({ user, review }: { user: User, review: number }) {
     // Map the user object properties to the keys used by progressMeta
     const progress: ProgressData = {
         streak: user.streak,
         learned: user.learnedCount,
         mastered: user.masteredCount,
-        review: user.reviewCount,
+        review,
     };
 
     return (

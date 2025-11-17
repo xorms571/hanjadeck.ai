@@ -21,44 +21,71 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
     const currentIndex = currentCardIndex + 1; // User-facing current card number
     const progressPercentage = (currentIndex / totalCards) * 100;
 
-    const handlePrevious = () => {
-        const prevIndex = (currentCardIndex - 1 + totalCards) % totalCards;
-        const prevCardId = allCardIds[prevIndex];
-        router.push(`/learn/${prevCardId}`);
-    };
-
-    const handleNext = () => {
-        const nextIndex = (currentCardIndex + 1) % totalCards;
-        const nextCardId = allCardIds[nextIndex];
-        router.push(`/learn/${nextCardId}`);
-    }
-
-    const onBookmarkToggle = async (cardId: string, isBookmarked: boolean): Promise<boolean> => {
-        const method = isBookmarked ? 'POST' : 'DELETE';
+    const api_toggleBookmark = async (cardId: string, bookmark: boolean, onUnauthorized: () => void): Promise<boolean> => {
+        const method = bookmark ? 'POST' : 'DELETE';
         try {
             const response = await fetch(`/api/cards/${cardId}/bookmark`, {
                 method: method,
             });
+
             if (response.ok) {
-                router.refresh(); // Re-fetch server data to update UI
-                return true; // Indicate success
-            } else {
-                if (response.status === 401) {
-                    const confirmRedirect = confirm('You need to log in to bookmark. Would you like to go to the login page?');
-                    if (confirmRedirect) {
-                        router.push('/login');
-                    }
-                    return false; // Indicate failure (even if redirect is confirmed, the bookmark action itself failed)
-                }
-                console.error('Failed to toggle bookmark:', await response.text());
-                alert('Failed to update bookmark status.');
-                return false; // Indicate failure
+                return true;
             }
+
+            if (response.status === 401) {
+                onUnauthorized();
+            } else {
+                console.error('Failed to update bookmark status:', await response.text());
+                alert('Failed to update bookmark status.');
+            }
+            return false;
+
         } catch (error) {
-            console.error('Error toggling bookmark:', error);
+            console.error('Error updating bookmark status:', error);
             alert('An error occurred while updating bookmark status.');
-            return false; // Indicate failure
+            return false;
         }
+    }
+
+    const handleUnauthorizedForCardAction = () => {
+        const hasShownConfirm = sessionStorage.getItem('hasShownLoginConfirm');
+        if (!hasShownConfirm) {
+            const confirmRedirect = confirm('You need to log in to save your progress. Would you like to go to the login page?');
+            sessionStorage.setItem('hasShownLoginConfirm', 'true');
+            if (confirmRedirect) {
+                router.push('/login');
+            }
+        }
+    };
+
+    const handleUnauthorizedForBookmarkToggle = () => {
+        const confirmRedirect = confirm('You need to log in to bookmark. Would you like to go to the login page?');
+        if (confirmRedirect) {
+            router.push('/login');
+        }
+    };
+
+    const handleCardAction = async (known: boolean) => {
+        await api_toggleBookmark(card.id, known, handleUnauthorizedForCardAction);
+        const nextIndex = (currentCardIndex + 1) % totalCards;
+        const nextCardId = allCardIds[nextIndex];
+        router.push(`/learn/${nextCardId}`);
+    };
+
+    const handlePrevious = () => {
+        handleCardAction(false);
+    };
+
+    const handleNext = () => {
+        handleCardAction(true);
+    }
+
+    const onBookmarkToggle = async (cardId: string, isBookmarked: boolean): Promise<boolean> => {
+        const success = await api_toggleBookmark(cardId, isBookmarked, handleUnauthorizedForBookmarkToggle);
+        if (success) {
+            router.refresh();
+        }
+        return success;
     };
 
     const baseButtonStyle = "w-34! h-9! md:w-[240px]! md:h-[72px]! rounded-xl! md:rounded-2xl! font-bold! gap-2! md:gap-4!"
@@ -74,13 +101,13 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
                     background="secondary"
                     className={`${baseButtonStyle} bg-(--secondary-cool)!`}
                     icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon /></div>}>
-                    <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Previous</p>
+                    <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Unknown</p>
                 </Button>
                 <Button
                     onClick={handleNext}
                     className={`${baseButtonStyle} flex-row-reverse! leading-[72px]`}
                     icon={<div className="w-5 h-5 md:w-10 md:h-10"><CircleArrowIcon direction="right" color="#F8F8F8" /></div>}>
-                    <p className="h-full leading-8 md:leading-[68px] text-(--secondary-white)! text-sm! md:text-2xl!">Next</p>
+                    <p className="h-full leading-8 md:leading-[68px] text-(--secondary-white)! text-sm! md:text-2xl!">Known</p>
                 </Button>
             </div>
         </div>

@@ -33,7 +33,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     });
 
     if (existingBookmark) {
-      return new NextResponse('Card already bookmarked', { status: 409 });
+      return new NextResponse('Card already bookmarked', { status: 200 });
     }
 
     const bookmark = await prisma.bookmark.create({
@@ -75,7 +75,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     });
 
     if (!existingBookmark) {
-      return new NextResponse('Bookmark not found', { status: 404 });
+      return new NextResponse('Bookmark not found', { status: 200 });
     }
 
     await prisma.bookmark.delete({
