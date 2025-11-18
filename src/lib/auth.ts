@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 import type { Role, Card } from '@prisma/client';
 import { updateUserStreak } from './user'; // Import updateUserStreak
+export const dynamic = "force-dynamic";
 
 // Define the type for the decoded JWT payload
 interface JwtPayload {

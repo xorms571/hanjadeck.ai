@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import prisma from '@/lib/prisma';
 import { serialize } from 'cookie';
+export const dynamic = "force-dynamic";
 
 const MAX_AGE = 60 * 60 * 24; // 1 day in seconds
 
