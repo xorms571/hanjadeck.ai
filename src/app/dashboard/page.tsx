@@ -38,9 +38,9 @@ export default async function DashboardPage() {
                         <OverallProgress user={user} totalCards={totalCards} />
                     </Container>
                     <Container className="border-[#D9D9D9] border flex flex-col gap-6 w-full">
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-end">
                             <h3 className="text-[22px]!">Review Queue</h3>
-                            <Button type="button" disabled className="disabled:bg-(--primary)! max-w-24! max-h-[38px]! text-[18px]! font-bold">
+                            <Button type="button" disabled className="disabled:bg-(--primary)! max-w-16! md:max-w-24! max-h-7! md:max-h-[38px]! text-sm! md:text-[18px]! font-bold">
                                 {bookmarkedCards.length} Cards
                             </Button>
                         </div>

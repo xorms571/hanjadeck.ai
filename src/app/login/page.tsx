@@ -30,6 +30,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         router.push('/dashboard');
+        router.refresh(); // To ensure the server-side state is updated
       } else {
         setError('Invalid email or password. Please try again.');
       }
