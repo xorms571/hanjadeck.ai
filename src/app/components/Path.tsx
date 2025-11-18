@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useRef } from "react";
 
 export default function SvgPathAnimationCSS({ strokeWidth, color, zIndex = '-z-30', top = 'top-1/2', className, transition = 2 }: { strokeWidth: number, color: string, zIndex?: string, top?: string, className?: string, transition?: number }) {
