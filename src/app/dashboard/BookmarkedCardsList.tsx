@@ -20,7 +20,7 @@ export default function BookmarkedCardsList({ bookmarkedCards }: BookmarkedCards
     <ul className="grid grid-cols-1 gap-6">
       {bookmarkedCards.map((bookmark) => (
         <li className='flex items-center justify-between' key={bookmark.id}>
-          <span className="text-lg mb-1">{bookmark.character} {bookmark.korean}</span>
+          <span className="text-lg mb-1 truncate max-w-30 md:max-w-none">{bookmark.character} {bookmark.korean}</span>
           <Link className='flex max-w-[92px] justify-between items-center' href={`/learn/${bookmark.id}`}>
             <span className='text-lg mb-1 mr-2'>Review</span>
             <Image width={20} height={20} src='/review.svg' alt='review icon' />

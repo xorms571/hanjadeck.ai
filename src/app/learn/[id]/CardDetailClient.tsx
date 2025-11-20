@@ -116,35 +116,40 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
         }
     };
 
-    const handleCardAction = async (known: boolean) => {
-        // ... (existing implementation)
-        let success = true;
-        if (card.isBookmarked !== known) {
-            success = await api_toggleBookmark(card.id, known, handleUnauthorizedForCardAction);
-        }
-
-        if (success) {
-            try {
-                await fetch('/api/users/me/interactions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ cardId: card.id }),
-                });
-            } catch (error) {
-                console.error('Error recording card interaction:', error);
-            }
-        }
-
+    const handleCardAction = (known: boolean) => {
+        // Navigate to the next card immediately
         const nextIndex = (currentCardIndex + 1) % totalCards;
         const nextCardId = allCardIds[nextIndex];
         router.push(`/learn/${nextCardId}`);
+
+        // Run API calls in the background without awaiting
+        (async () => {
+            try {
+                let bookmarkSuccess = true;
+                if (card.isBookmarked !== known) {
+                    // We don't await here, but we can check the result if needed
+                    // for sequential background tasks.
+                    bookmarkSuccess = await api_toggleBookmark(card.id, known, handleUnauthorizedForCardAction);
+                }
+
+                if (bookmarkSuccess) {
+                    await fetch('/api/users/me/interactions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ cardId: card.id }),
+                    });
+                }
+            } catch (error) {
+                console.error('Error in background card action:', error);
+            }
+        })();
     };
 
-    const handlePrevious = () => {
+    const handleUnknown = () => {
         handleCardAction(true);
     };
 
-    const handleNext = () => {
+    const handleKnown = () => {
         handleCardAction(false);
     }
 
@@ -201,14 +206,14 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
 
             <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
                 <Button
-                    onClick={handlePrevious}
+                    onClick={handleUnknown}
                     background="secondary"
                     className={`${baseButtonStyle} bg-(--secondary-cool)!`}
                     icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/x.svg' alt="unknown icon" fill /></div>}>
                     <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Unknown</p>
                 </Button>
                 <Button
-                    onClick={handleNext}
+                    onClick={handleKnown}
                     className={`${baseButtonStyle} flex-row-reverse! leading-[72px]`}
                     icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/check.svg' alt="known icon" fill /></div>}>
                     <p className="h-full leading-8 md:leading-[68px] text-(--secondary-white)! text-sm! md:text-2xl!">Known</p>
