@@ -133,11 +133,11 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
             } catch (error) {
                 console.error('Error recording card interaction:', error);
             }
-
-            const nextIndex = (currentCardIndex + 1) % totalCards;
-            const nextCardId = allCardIds[nextIndex];
-            router.push(`/learn/${nextCardId}`);
         }
+
+        const nextIndex = (currentCardIndex + 1) % totalCards;
+        const nextCardId = allCardIds[nextIndex];
+        router.push(`/learn/${nextCardId}`);
     };
 
     const handlePrevious = () => {

@@ -15,7 +15,7 @@ export default function HeaderClient({ user }: { user: User | null }) {
     useEffect(() => {
         // Close the mobile menu when the route changes
         setIsMenuOpen(false);
-    }, []);
+    }, [pathname]);
 
     const isIntroPageThenHidden = pathname.includes('intro') && "hidden!";
     const isUserLoggedInThenDashboardOrIntro = user ? "/dashboard" : "/login";
