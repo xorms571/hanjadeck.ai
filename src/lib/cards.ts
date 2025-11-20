@@ -94,3 +94,31 @@ export async function getCardById(id: string, userId: string | undefined): Promi
         return null; // Return null on error or if not found
     }
 }
+
+export async function searchCards(userId: string | undefined, query: string): Promise<CardWithBookmarkStatus[]> {
+    try {
+        const cards = await prisma.card.findMany({
+            where: {
+                OR: [
+                    { character: { contains: query, mode: 'insensitive' } },
+                    { korean: { contains: query, mode: 'insensitive' } },
+                    { english: { contains: query, mode: 'insensitive' } },
+                ],
+            },
+            include: {
+                bookmarkedBy: userId ? {
+                    where: { userId },
+                    select: { userId: true }
+                } : false,
+            }
+        });
+
+        return cards.map(card => ({
+            ...card,
+            isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
+        }));
+    } catch (error) {
+        console.error("Failed to search cards:", error);
+        return [];
+    }
+}
