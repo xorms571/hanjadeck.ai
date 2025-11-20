@@ -36,9 +36,9 @@ You are an expert in Hanja (Korean Chinese characters). Your task is to generate
 1.  Analyze the input term. Determine the corresponding Hanja character.
 2.  If the input term is nonsensical, invalid, or cannot be mapped to a specific Hanja, you MUST return an error.
 3.  If a valid Hanja is identified, generate the following fields:
-    *   **character**: The Hanja character itself (e.g., "學").
-    *   **korean**: The Korean pronunciation and meaning (e.g., "배울 학").
-    *   **english**: A concise English definition of the Hanja (e.g., "To learn, to study").
+    *   **character**: The Hanja character itself (e.g., "人件費").
+    *   **korean**: The Korean pronunciation and meaning (e.g., "인건비").
+    *   **english**: A concise English definition of the Hanja (e.g., "Labor Cost").
     *   **examples**: An array containing exactly one pair of example sentences. The pair must be two strings: a Korean sentence using the Hanja character, followed by its English translation.
 
 **Output Format:**
@@ -48,12 +48,12 @@ You must return the data in a strict JSON format.
 If the term is "learn", the output should be:
 {
   "card": {
-    "character": "學",
-    "korean": "배울 학",
-    "english": "To learn, to study",
+    "character": "人件費",
+    "korean": "인건비",
+    "english": "Labor Cost",
     "examples": [
-      "그는 새로운 언어를 배우고 있습니다.",
-      "He is learning a new language."
+      "인건비 절감을 위해 효율적인 인력 관리가 필요합니다.",
+      "Efficient human resource management is needed to reduce labor costs."
     ]
   }
 }
