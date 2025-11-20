@@ -1,6 +1,6 @@
 export default function LearningTip({learningTipHandler}:{learningTipHandler: () => void}) {
     return (
-        <div onClick={learningTipHandler} className="absolute top-0 left-0 w-full h-full bg-black/80 text-white flex flex-col gap-10 justify-center items-center md:hidden text-xs">
+        <div onClick={learningTipHandler} className="absolute top-0 left-0 w-full h-screen bg-black/80 text-white flex flex-col gap-10 justify-center items-center md:hidden text-xs">
             <div className="flex justify-between gap-10 mt-40">
                 <div className="flex flex-col justify-start items-start w-18">
                     <div className="w-5 h-7 rounded bg-white fade-left" />
