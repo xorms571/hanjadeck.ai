@@ -17,6 +17,7 @@ export async function getTotalCardCount(): Promise<number> {
 }
 
 export async function getCards(userId: string | undefined, page: number = 1, limit: number = 12): Promise<CardWithBookmarkStatus[]> {
+
     try {
         const cards = await prisma.card.findMany({
             skip: (page - 1) * limit,
@@ -33,6 +34,31 @@ export async function getCards(userId: string | undefined, page: number = 1, lim
             }
         });
 
+        return cards.map(card => ({
+            ...card,
+            isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
+        }));
+    } catch (error) {
+        console.error("Failed to get cards:", error);
+        return []; // Return empty array on error
+    }
+
+}
+
+export async function getAllCards(userId: string | undefined): Promise<CardWithBookmarkStatus[]> {
+    try {
+        const cards = await prisma.card.findMany({
+            orderBy: [
+                { createdAt: 'desc' },
+                { id: 'asc' }
+            ],
+            include: {
+                bookmarkedBy: userId ? {
+                    where: { userId },
+                    select: { userId: true } // Only need to know if a bookmark exists
+                } : false,
+            }
+        });
         return cards.map(card => ({
             ...card,
             isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,

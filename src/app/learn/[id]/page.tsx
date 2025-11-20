@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/lib/auth';
-import { getCardById, getTotalCardCount, getCards } from '@/lib/cards';
+import { getCardById, getTotalCardCount, getCards, getAllCards } from '@/lib/cards';
 import CardDetailClient from './CardDetailClient';
 
 export default async function CardDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -19,7 +19,7 @@ export default async function CardDetailPage({ params }: { params: Promise<{ id:
         redirect('/learn'); // Redirect to the main learn page
     }
 
-    const allCards = await getCards(user?.id); // Fetch all cards to get their IDs for navigation
+    const allCards = await getAllCards(user?.id); // Fetch all cards to get their IDs for navigation
     const allCardIds = allCards.map(c => c.id);
     const totalCards = await getTotalCardCount();
 
