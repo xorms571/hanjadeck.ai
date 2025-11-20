@@ -3,7 +3,6 @@ import { getCurrentUser } from '@/lib/auth';
 import prisma from '@/lib/prisma';
 
 export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
-  console.log('Bookmark API POST params:', params); // Debugging line
   const { id: cardId } = await params; // Explicitly destructure and await
 
   const user = await getCurrentUser();
