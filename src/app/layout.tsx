@@ -22,11 +22,11 @@ export default function RootLayout({
   return (
     <html className="overflow-x-hidden" lang="en">
       <body
-        className={`${alvertSans.variable} bg-right! bg-no-repeat! antialiasedmax-w-[1228px] m-auto`}
+        className={`${alvertSans.variable} bg-right! bg-no-repeat! max-w-[1228px] m-auto p-6`}
       >
         <BodyStyler/>
         <Header />
-        <main className="min-h-dvh mb-20 p-6 pt-30">{children}</main>
+        <main className="mt-5 mb-0 md:mt-10 md:mb-10 p-0!">{children}</main>
       </body>
     </html>
   );

@@ -245,12 +245,12 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
             <div className="flex justify-between items-center">
                 <div className="flex">
                     {user?.role === 'ADMIN' && (
-                        <Button onClick={handleEditToggle} className="h-7! mr-2 max-w-16! text-sm">
+                        <Button onClick={handleEditToggle} background="secondary" className="h-7! mr-2 w-12! max-w-16! text-sm">
                             {isEditing ? 'Cancel' : 'Edit'}
                         </Button>
                     )}
-                    <Button onClick={() => router.push('/learn')} className="h-7! w-40! text-sm">
-                        Back to List
+                    <Button onClick={() => router.push('/learn')} className="h-7! max-w-16! w-12! text-sm">
+                        Back
                     </Button>
                 </div>
                 <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
@@ -309,7 +309,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
                 <Button
                     onClick={handleUnknown}
                     background="secondary"
-                    className={`${baseButtonStyle} bg-(--secondary-cool)!`}
+                    className={`${baseButtonStyle} bg-(--secondary-cool)! hover:bg-(--secondary-cool-hover)!`}
                     icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/x.svg' alt="unknown icon" fill /></div>}>
                     <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Unknown</p>
                 </Button>

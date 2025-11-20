@@ -49,9 +49,11 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                             </button>
                         )}
                     </div>
-                    <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
-                    <h2 className={`${character.length>4?"text-[36px]!":""} opacity-0`}>{korean}</h2>
-                    <p className="opacity-0">{english}</p>
+                    <div className="text-center">
+                        <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
+                        <h2 className={`${character.length>4?"text-[36px]!":""} opacity-0`}>{korean}</h2>
+                        <p className="opacity-0">{english}</p>
+                    </div>
                     <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base opacity-0">
                         <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
                         <ul className="bg-(--neutrals-white)  px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4">
@@ -71,9 +73,11 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                             </button>
                         )}
                     </div>
-                    <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
-                    <h2 className={character.length>4?"text-[36px]!":""}>{korean}</h2>
-                    <p>{english}</p>
+                    <div className="text-center">
+                        <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
+                        <h2 className={character.length>4?"text-[36px]!":""}>{korean}</h2>
+                        <p>{english}</p>
+                    </div>
                     <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base">
                         <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
                         <ul className="bg-(--neutrals-white) px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4">

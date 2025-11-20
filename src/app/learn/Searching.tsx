@@ -96,16 +96,16 @@ export default function Searching({ initialCards }: { initialCards: CardWithBook
 
     return (<>
         <Input type="search" className="mb-[98px]" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-        {searchTerm.length > 0 && cards.length > 0 && <span className="absolute top-[202px]">Results for {`"${searchTerm}"`}</span>}
+        {searchTerm.length > 0 && cards.length > 0 && <span className="absolute top-[180px] md:top-40 lg:top-[200px]">Results for {`"${searchTerm}"`}</span>}
         {searchTerm.length > 0 && cards.length === 0 && !isLoading ? (
             <NoResult searchTerm={searchTerm} />
         ) : (
             <>
                 <ul className="flex flex-wrap gap-4">
                     {cards.map((card) => (
-                        <li key={card.id} className="text-[32px] w-full md:w-[calc(50%-8px)] lg:w-[calc(25%-12px)] h-[232px]">
+                        <li key={card.id} className="md:text-[32px] w-[calc(50%-8px)] lg:w-[calc(25%-12px)] h-40 md:h-[232px]">
                             <Container className="h-full font-bold shadow! rounded-[20px]!">
-                                <Link className="w-full h-full flex justify-center items-center" href={`learn/${card.id}`}>
+                                <Link className="w-full h-full flex justify-center items-center text-center" href={`learn/${card.id}`}>
                                     {card.korean}
                                 </Link>
                             </Container>
