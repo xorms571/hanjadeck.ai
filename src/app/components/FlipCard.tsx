@@ -16,6 +16,26 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
     // Initialize isBookmarked state only if bookmarking is enabled
     const [isBookmarked, setIsBookmarked] = useState(onBookmarkToggle ? card.isBookmarked : false);
 
+    const highlightText = (text: string, highlightWord: string, className: string) => {
+        if (!highlightWord) return <>{text}</>;
+        // Use a regular expression to split the text, matching the highlightWord case-insensitively
+        const parts = text.split(new RegExp(`(${highlightWord})`, 'gi'));
+        return (
+            <>
+                {parts.map((part, i) =>
+                    // Check if the current part matches the highlightWord (case-insensitively)
+                    part.toLowerCase() === highlightWord.toLowerCase() ? (
+                        <span key={i} className={className}>
+                            {part}
+                        </span>
+                    ) : (
+                        part
+                    )
+                )}
+            </>
+        );
+    };
+
     const handleBookmarkToggle = async (e: React.MouseEvent) => {
         e.stopPropagation(); //카드 뒤집기 이벤트 방지
         if (onBookmarkToggle) { // Only proceed if bookmarking is enabled
@@ -58,7 +78,13 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                         <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
                         <ul className="bg-(--neutrals-white)  px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4">
                             {examples.map((example: string, index: number) => (
-                                <li className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`} key={index}>{example}</li>
+                                <li className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`} key={index}>
+                                    {index === 0 && korean
+                                        ? highlightText(example, korean, "text-(--primary) font-bold")
+                                        : index === 1 && english
+                                        ? highlightText(example, english, "text-(--primary) font-bold")
+                                        : example}
+                                </li>
                             ))}
                         </ul>
                     </div>
@@ -82,7 +108,13 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                         <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
                         <ul className="bg-(--neutrals-white) px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4">
                             {examples.map((example: string, index: number) => (
-                                <li className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`} key={index}>{example}</li>
+                                <li className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`} key={index}>
+                                    {index === 0 && korean
+                                        ? highlightText(example, korean, "text-(--primary) font-bold")
+                                        : index === 1 && english
+                                        ? highlightText(example, english, "text-(--primary) font-bold")
+                                        : example}
+                                </li>
                             ))}
                         </ul>
                     </div>
