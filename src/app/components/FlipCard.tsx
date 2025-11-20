@@ -41,7 +41,7 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                 onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") setFlipped(v => !v); }}
             >
                 {/* Front Face */}
-                <Container className={baseContainerStyle} shadow>
+                <Container className={`${baseContainerStyle} justify-between`} shadow>
                     <div className="text-end w-full">
                         {onBookmarkToggle && ( // Conditionally render button
                             <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
@@ -49,7 +49,17 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                             </button>
                         )}
                     </div>
-                    <h1 className="text-[96px] mt-1.5 md:mt-3">{character}</h1>
+                    <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
+                    <h2 className={`${character.length>4?"text-[36px]!":""} opacity-0`}>{korean}</h2>
+                    <p className="opacity-0">{english}</p>
+                    <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base opacity-0">
+                        <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
+                        <ul className="bg-(--neutrals-white)  px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4">
+                            {examples.map((example: string, index: number) => (
+                                <li className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`} key={index}>{example}</li>
+                            ))}
+                        </ul>
+                    </div>
                 </Container>
 
                 {/* Back Face */}
@@ -61,8 +71,8 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                             </button>
                         )}
                     </div>
-                    <h1 className="text-[96px]">{character}</h1>
-                    <h2>{korean}</h2>
+                    <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
+                    <h2 className={character.length>4?"text-[36px]!":""}>{korean}</h2>
                     <p>{english}</p>
                     <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base">
                         <h4 className="text-sm! md:text-[24px]!">Example Sentence</h4>
