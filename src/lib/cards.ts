@@ -16,12 +16,15 @@ export async function getTotalCardCount(): Promise<number> {
     }
 }
 
-export async function getCards(userId: string | undefined): Promise<CardWithBookmarkStatus[]> {
+export async function getCards(userId: string | undefined, page: number = 1, limit: number = 12): Promise<CardWithBookmarkStatus[]> {
     try {
         const cards = await prisma.card.findMany({
-            orderBy: {
-                createdAt: 'asc',
-            },
+            skip: (page - 1) * limit,
+            take: limit,
+            orderBy: [
+                { createdAt: 'desc' },
+                { id: 'asc' }
+            ],
             include: {
                 bookmarkedBy: userId ? {
                     where: { userId },

@@ -5,7 +5,7 @@ import Searching from "./Searching";
 export default async function LearnPage() {
     const user = await getCurrentUser();
 
-    const cards = await getCards(user?.id);
+    const cards = await getCards(user?.id, 1, 12);
 
     return (
         <div className="relative">
