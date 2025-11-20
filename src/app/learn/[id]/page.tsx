@@ -24,6 +24,6 @@ export default async function CardDetailPage({ params }: { params: Promise<{ id:
     const totalCards = allCards.length; // Or use getTotalCardCount() if preferred
 
     return (
-        <CardDetailClient card={card} totalCards={totalCards} allCardIds={allCardIds} />
+        <CardDetailClient user={user} card={card} totalCards={totalCards} allCardIds={allCardIds} />
     );
 }

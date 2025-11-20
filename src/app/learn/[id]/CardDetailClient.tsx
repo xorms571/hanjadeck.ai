@@ -1,27 +1,76 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
 import FlipCard from "../../components/FlipCard";
-import { CardWithBookmarkStatus } from "@/lib/cards"; // Import CardWithBookmarkStatus type
+import { CardWithBookmarkStatus } from "@/lib/cards";
+import { User } from "@/lib/auth";
 import Image from "next/image";
+import Input from "@/app/components/Input";
+import Container from "@/app/components/Container";
 
-interface CardDetailClientProps {
-    card: CardWithBookmarkStatus; // Use the extended type
+interface props {
+    card: CardWithBookmarkStatus;
     totalCards: number;
-    allCardIds: string[]; // To handle navigation
+    allCardIds: string[];
+    user: User | null;
 }
 
-export default function CardDetailClient({ card, totalCards, allCardIds }: CardDetailClientProps) {
+export default function CardDetailClient({ card, totalCards, allCardIds, user }: props) {
     const router = useRouter();
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedCard, setEditedCard] = useState(card);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        setEditedCard(card);
+    }, [card]);
 
     const currentCardIndex = allCardIds.findIndex(id => id === card.id);
-
-    const currentIndex = currentCardIndex + 1; // User-facing current card number
+    const currentIndex = currentCardIndex + 1;
     const progressPercentage = (currentIndex / totalCards) * 100;
 
+    const handleEditToggle = () => {
+        setIsEditing(!isEditing);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setEditedCard(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleSave = async () => {
+        setIsLoading(true);
+        try {
+            const response = await fetch(`/api/cards/${card.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editedCard),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save card');
+            }
+
+            setIsEditing(false);
+            router.refresh(); // Refresh the page to show the updated card data
+        } catch (error) {
+            console.error(error);
+            alert('Error saving card. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleCancel = () => {
+        setIsEditing(false);
+        setEditedCard(card); // Reset changes
+    };
+
     const api_toggleBookmark = async (cardId: string, bookmark: boolean, onUnauthorized: () => void): Promise<boolean> => {
+        // ... (existing implementation)
         const method = bookmark ? 'POST' : 'DELETE';
         try {
             const response = await fetch(`/api/cards/${cardId}/bookmark`, {
@@ -48,6 +97,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
     }
 
     const handleUnauthorizedForCardAction = () => {
+        // ... (existing implementation)
         const hasShownConfirm = sessionStorage.getItem('hasShownLoginConfirm');
         if (!hasShownConfirm) {
             const confirmRedirect = confirm('You need to log in to save your progress. Would you like to go to the login page?');
@@ -59,6 +109,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
     };
 
     const handleUnauthorizedForBookmarkToggle = () => {
+        // ... (existing implementation)
         const confirmRedirect = confirm('You need to log in to bookmark. Would you like to go to the login page?');
         if (confirmRedirect) {
             router.push('/login');
@@ -66,14 +117,13 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
     };
 
     const handleCardAction = async (known: boolean) => {
+        // ... (existing implementation)
         let success = true;
-        // Only call api_toggleBookmark if the bookmark status needs to change
         if (card.isBookmarked !== known) {
             success = await api_toggleBookmark(card.id, known, handleUnauthorizedForCardAction);
         }
 
         if (success) {
-            // Record interaction
             try {
                 await fetch('/api/users/me/interactions', {
                     method: 'POST',
@@ -82,10 +132,8 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
                 });
             } catch (error) {
                 console.error('Error recording card interaction:', error);
-                // Do not prevent navigation even if interaction recording fails
             }
 
-            // Navigate to the next card
             const nextIndex = (currentCardIndex + 1) % totalCards;
             const nextCardId = allCardIds[nextIndex];
             router.push(`/learn/${nextCardId}`);
@@ -113,14 +161,50 @@ export default function CardDetailClient({ card, totalCards, allCardIds }: CardD
     return (
         <div className="max-w-md lg:max-w-[796px] mx-auto">
             <ProcessBar background="secondary" number={progressPercentage} />
-            <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
-            <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} /> {/* Pass card and onBookmarkToggle */}
+            <div className="flex justify-between items-center">
+                {user?.role === 'ADMIN' && (
+                    <Button onClick={handleEditToggle} className="h-7! max-w-16! text-sm">
+                        {isEditing ? 'Cancel' : 'Edit'}
+                    </Button>
+                )}
+                <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
+            </div>
+
+            {isEditing ? (
+                <Container>
+                    <Input label="character" name="character" value={editedCard.character} onChange={handleInputChange} />
+                    <Input label="korean" name="korean" value={editedCard.korean} onChange={handleInputChange} />
+                    <Input label="english" name="english" value={editedCard.english} onChange={handleInputChange} />
+                    <div>
+                        <label htmlFor="examples" className="inline-block text-[16px] md:text-[22px] mb-2 font-medium">examples</label>
+                        <textarea
+                            id="examples"
+                            name="examples"
+                            value={editedCard.examples.join('\n')}
+                            onChange={handleInputChange}
+                            className="w-full text-[16px] md:text-[22px] text-[#7A7A7A] border-(--secondary-cool) rounded-4xl p-4 border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            rows={5}
+                        />
+                    </div>
+                    <div className="flex gap-4 mt-4">
+                        <Button onClick={handleSave} disabled={isLoading} className="w-full">
+                            {isLoading ? 'Saving...' : 'Save'}
+                        </Button>
+                        <Button onClick={handleCancel} background="secondary" className="w-full">
+                            Cancel
+                        </Button>
+                    </div>
+                </Container>
+            ) : (
+                <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} />
+            )}
+
             <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
                 <Button
                     onClick={handlePrevious}
                     background="secondary"
                     className={`${baseButtonStyle} bg-(--secondary-cool)!`}
-                    icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/x.svg' alt="unknown icon" fill/></div>}>
+                    icon={<div className="w-5 h-5 md:w-10 md:h-10 relative"><Image src='/x.svg' alt="unknown icon" fill /></div>}>
                     <p className="h-full leading-8 md:leading-[68px] text-(--neutrals-black)! text-sm! md:text-2xl!">Unknown</p>
                 </Button>
                 <Button
