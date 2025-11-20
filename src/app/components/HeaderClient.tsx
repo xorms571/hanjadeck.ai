@@ -21,7 +21,7 @@ export default function HeaderClient({ user }: { user: User | null }) {
     const isUserLoggedInThenDashboardOrIntro = user ? "/dashboard" : "/login";
 
     return (
-        <header className="mb-12 z-152 flex justify-between items-center font-bold">
+        <header className={`${isMenuOpen?"":"backdrop-blur-md"} w-full z-152 flex justify-between items-center font-bold fixed p-6`}>
             <Link className="z-152" href={isUserLoggedInThenDashboardOrIntro}>
                 <Image src='/logo-lg.svg' width={185} height={40} alt="logo" />
             </Link>
