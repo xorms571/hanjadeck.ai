@@ -31,7 +31,7 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
     const baseContainerStyle = "w-full flex flex-col items-center px-4 py-3 md:px-6 md:py-6 absolute inset-0 backface-hidden rounded-[20px]! duration-100"
 
     return (
-        <div className="perspective-[1000px] cursor-pointer w-full max-w-[796px] h-[515px]">
+        <div className="perspective-[1000px] w-full max-w-[796px] h-[515px]">
             <div
                 className={`relative w-full h-full transition-transform duration-600 ease-[cubic-bezier(.2,.9,.2,1)] transform-3d ${flipped ? "transform-[rotateY(180deg)]" : ""}`}
                 role="button"

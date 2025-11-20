@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html className="overflow-x-hidden" lang="en">
       <body
         className={`${alvertSans.variable} bg-right! bg-no-repeat! antialiased p-6 max-w-[1228px] m-auto`}
       >

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Button from "@/app/components/Button";
 import ProcessBar from "@/app/components/ProcessBar";
 import FlipCard from "../../components/FlipCard";
@@ -23,6 +23,66 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
     const [isEditing, setIsEditing] = useState(false);
     const [editedCard, setEditedCard] = useState(card);
     const [isLoading, setIsLoading] = useState(false);
+
+    const cardRef = useRef<HTMLDivElement | null>(null);
+
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [currentX, setCurrentX] = useState(0);
+
+    const threshold = 100; // 일정 거리 이상이면 완전히 날아가게
+
+    const getClientX = (e: React.MouseEvent | React.TouchEvent): number => {
+        return "touches" in e ? e.touches[0].clientX : e.clientX;
+    };
+
+    const onDragStart = (e: React.MouseEvent | React.TouchEvent) => {
+        const clientX = getClientX(e);
+        setIsDragging(true);
+        setStartX(clientX);
+
+        if (cardRef.current) {
+            cardRef.current.style.transition = "none";
+        }
+    };
+
+    const onDragMove = (e: React.MouseEvent | React.TouchEvent) => {
+        if (!isDragging || !cardRef.current) return;
+
+        const clientX = getClientX(e);
+        const delta = clientX - startX;
+        setCurrentX(delta);
+
+        // 실시간 이동
+        cardRef.current.style.transform = `translateX(${delta}px)`;
+    };
+
+    const onDragEnd = () => {
+        if (!cardRef.current) return;
+
+        setIsDragging(false);
+
+        // 오른쪽으로 크게 드래그 → 화면 밖으로 날리기
+        if (currentX > threshold) {
+            cardRef.current.style.transition = "0.3s ease-out";
+            cardRef.current.style.transform = "translateX(1500px)"; // 화면 오른쪽 끝
+            handleKnown();
+        }
+        // 왼쪽으로 크게 드래그 → 화면 밖으로 날리기
+        else if (currentX < -threshold) {
+            cardRef.current.style.transition = "0.3s ease-out";
+            cardRef.current.style.transform = "translateX(-1500px)"; // 화면 왼쪽 끝
+            handleUnknown();
+        }
+        // threshold 미만 → 원래 자리로 복귀
+        else {
+            cardRef.current.style.transition = "0.25s ease-out";
+            cardRef.current.style.transform = "translateX(0px)";
+            console.log("🔙 원래 자리로 복귀");
+        }
+
+        setCurrentX(0);
+    };
 
     useEffect(() => {
         setEditedCard(card);
@@ -180,34 +240,48 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
                 <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
             </div>
 
-            {isEditing ? (
-                <Container>
-                    <Input label="character" name="character" value={editedCard.character} onChange={handleInputChange} />
-                    <Input label="korean" name="korean" value={editedCard.korean} onChange={handleInputChange} />
-                    <Input label="english" name="english" value={editedCard.english} onChange={handleInputChange} />
-                    <div>
-                        <label htmlFor="examples" className="inline-block text-[16px] md:text-[22px] mb-2 font-medium">examples</label>
-                        <textarea
-                            id="examples"
-                            name="examples"
-                            value={editedCard.examples.join('\n')}
-                            onChange={handleInputChange}
-                            className="w-full text-[16px] md:text-[22px] text-[#7A7A7A] border-(--secondary-cool) rounded-4xl p-4 border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            rows={5}
-                        />
-                    </div>
-                    <div className="flex gap-4 mt-4">
-                        <Button onClick={handleSave} disabled={isLoading} className="w-full">
-                            {isLoading ? 'Saving...' : 'Save'}
-                        </Button>
-                        <Button onClick={handleCancel} background="secondary" className="w-full">
-                            Cancel
-                        </Button>
-                    </div>
-                </Container>
-            ) : (
-                <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} />
-            )}
+            <div
+                ref={cardRef}
+                onMouseDown={onDragStart}
+                onMouseMove={onDragMove}
+                onMouseUp={onDragEnd}
+                onMouseLeave={isDragging ? onDragEnd : undefined}
+                onTouchStart={onDragStart}
+                onTouchMove={onDragMove}
+                onTouchEnd={onDragEnd} style={{
+                    cursor: "grab",
+                    touchAction: "none", // 모바일에서 드래그 방해 제거
+                    userSelect: "none",
+                }}>
+                {isEditing ? (
+                    <Container>
+                        <Input label="character" name="character" value={editedCard.character} onChange={handleInputChange} />
+                        <Input label="korean" name="korean" value={editedCard.korean} onChange={handleInputChange} />
+                        <Input label="english" name="english" value={editedCard.english} onChange={handleInputChange} />
+                        <div>
+                            <label htmlFor="examples" className="inline-block text-[16px] md:text-[22px] mb-2 font-medium">examples</label>
+                            <textarea
+                                id="examples"
+                                name="examples"
+                                value={editedCard.examples.join('\n')}
+                                onChange={handleInputChange}
+                                className="w-full text-[16px] md:text-[22px] text-[#7A7A7A] border-(--secondary-cool) rounded-4xl p-4 border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                rows={5}
+                            />
+                        </div>
+                        <div className="flex gap-4 mt-4">
+                            <Button onClick={handleSave} disabled={isLoading} className="w-full">
+                                {isLoading ? 'Saving...' : 'Save'}
+                            </Button>
+                            <Button onClick={handleCancel} background="secondary" className="w-full">
+                                Cancel
+                            </Button>
+                        </div>
+                    </Container>
+                ) : (
+                    <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} />
+                )}
+            </div>
 
             <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
                 <Button
