@@ -10,6 +10,7 @@ import { User } from "@/lib/auth";
 import Image from "next/image";
 import Input from "@/app/components/Input";
 import Container from "@/app/components/Container";
+import LearningTip from "./LearningTip";
 
 interface props {
     card: CardWithBookmarkStatus;
@@ -23,14 +24,24 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
     const [isEditing, setIsEditing] = useState(false);
     const [editedCard, setEditedCard] = useState(card);
     const [isLoading, setIsLoading] = useState(false);
+    const [showLearningTip, setShowLearningTip] = useState(false);
 
     const cardRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const hasSeen = sessionStorage.getItem('learningTip');
+            if (!hasSeen) {
+                setShowLearningTip(true);
+            }
+        }
+    }, []);
 
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
     const [currentX, setCurrentX] = useState(0);
 
-    const threshold = 100; // 일정 거리 이상이면 완전히 날아가게
+    const threshold = 50; // 일정 거리 이상이면 완전히 날아가게
 
     const getClientX = (e: React.MouseEvent | React.TouchEvent): number => {
         return "touches" in e ? e.touches[0].clientX : e.clientX;
@@ -223,6 +234,11 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
 
     const baseButtonStyle = "w-34! h-9! md:w-[240px]! md:h-[72px]! rounded-xl! md:rounded-2xl! font-bold! gap-2! md:gap-4!"
 
+    const learningTipHandler = () => {
+        sessionStorage.setItem('learningTip', 'true');
+        setShowLearningTip(false);
+    }
+
     return (
         <div className="max-w-md lg:max-w-[796px] mx-auto">
             <ProcessBar background="secondary" number={progressPercentage} />
@@ -240,50 +256,56 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
                 <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
             </div>
 
-            <div
-                ref={cardRef}
-                onMouseDown={onDragStart}
-                onMouseMove={onDragMove}
-                onMouseUp={onDragEnd}
-                onMouseLeave={isDragging ? onDragEnd : undefined}
-                onTouchStart={onDragStart}
-                onTouchMove={onDragMove}
-                onTouchEnd={onDragEnd} style={{
-                    cursor: "grab",
-                    touchAction: "none", // 모바일에서 드래그 방해 제거
-                    userSelect: "none",
-                }}>
-                {isEditing ? (
-                    <Container>
-                        <Input label="character" name="character" value={editedCard.character} onChange={handleInputChange} />
-                        <Input label="korean" name="korean" value={editedCard.korean} onChange={handleInputChange} />
-                        <Input label="english" name="english" value={editedCard.english} onChange={handleInputChange} />
-                        <div>
-                            <label htmlFor="examples" className="inline-block text-[16px] md:text-[22px] mb-2 font-medium">examples</label>
-                            <textarea
-                                id="examples"
-                                name="examples"
-                                value={editedCard.examples.join('\n')}
-                                onChange={handleInputChange}
-                                className="w-full text-[16px] md:text-[22px] text-[#7A7A7A] border-(--secondary-cool) rounded-4xl p-4 border focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                rows={5}
-                            />
-                        </div>
-                        <div className="flex gap-4 mt-4">
-                            <Button onClick={handleSave} disabled={isLoading} className="w-full">
-                                {isLoading ? 'Saving...' : 'Save'}
-                            </Button>
-                            <Button onClick={handleCancel} background="secondary" className="w-full">
-                                Cancel
-                            </Button>
-                        </div>
-                    </Container>
-                ) : (
-                    <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} />
-                )}
+            <div className="relative">
+                <div
+                    ref={cardRef}
+                    onMouseDown={onDragStart}
+                    onMouseMove={onDragMove}
+                    onMouseUp={onDragEnd}
+                    onMouseLeave={isDragging ? onDragEnd : undefined}
+                    onTouchStart={onDragStart}
+                    onTouchMove={onDragMove}
+                    onTouchEnd={onDragEnd}
+                    style={{
+                        cursor: "grab",
+                        touchAction: "none", // 모바일에서 드래그 방해 제거
+                        userSelect: "none",
+                    }}>
+                    {isEditing ? (
+                        <Container>
+                            <Input label="character" name="character" value={editedCard.character} onChange={handleInputChange} />
+                            <Input label="korean" name="korean" value={editedCard.korean} onChange={handleInputChange} />
+                            <Input label="english" name="english" value={editedCard.english} onChange={handleInputChange} />
+                            <div>
+                                <label htmlFor="examples" className="inline-block text-[16px] md:text-[22px] mb-2 font-medium">examples</label>
+                                <textarea
+                                    id="examples"
+                                    name="examples"
+                                    value={editedCard.examples.join('\n')}
+                                    onChange={handleInputChange}
+                                    className="w-full text-[16px] md:text-[22px] text-[#7A7A7A] border-(--secondary-cool) rounded-4xl p-4 border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    rows={5}
+                                />
+                            </div>
+                            <div className="flex gap-4 mt-4">
+                                <Button onClick={handleSave} disabled={isLoading} className="w-full">
+                                    {isLoading ? 'Saving...' : 'Save'}
+                                </Button>
+                                <Button onClick={handleCancel} background="secondary" className="w-full">
+                                    Cancel
+                                </Button>
+                            </div>
+                        </Container>
+                    ) : (
+                        <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} />
+                    )}
+                </div>
+                <Container className={`-z-10 h-[calc(100vh-180px)] md:h-[515px] absolute top-0 bg-(--primary)/20! shadow-inner flex justify-center items-center w-full`}>
+                    <Image className="opacity-50" src="/logo-lg.svg" alt="logo icon" width={150} height={150} />
+                </Container>
             </div>
-
-            <div className="max-w-[536px] mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
+            {showLearningTip && <LearningTip learningTipHandler={learningTipHandler}/>}
+            <div className="max-w-[536px] mt-[72px] mx-auto hidden md:flex justify-between gap-5! md:gap-14!">
                 <Button
                     onClick={handleUnknown}
                     background="secondary"
