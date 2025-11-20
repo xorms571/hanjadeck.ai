@@ -167,11 +167,16 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
         <div className="max-w-md lg:max-w-[796px] mx-auto">
             <ProcessBar background="secondary" number={progressPercentage} />
             <div className="flex justify-between items-center">
-                {user?.role === 'ADMIN' && (
-                    <Button onClick={handleEditToggle} className="h-7! max-w-16! text-sm">
-                        {isEditing ? 'Cancel' : 'Edit'}
+                <div className="flex">
+                    {user?.role === 'ADMIN' && (
+                        <Button onClick={handleEditToggle} className="h-7! mr-2 max-w-16! text-sm">
+                            {isEditing ? 'Cancel' : 'Edit'}
+                        </Button>
+                    )}
+                    <Button onClick={() => router.push('/learn')} className="h-7! w-40! text-sm">
+                        Back to List
                     </Button>
-                )}
+                </div>
                 <p className="text-end my-4">{`${currentIndex} of ${totalCards}`}</p>
             </div>
 
