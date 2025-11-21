@@ -6,6 +6,7 @@ import NoResult from "./NoResult";
 import Link from "next/link";
 import Container from "../components/Container";
 import { CardWithBookmarkStatus } from "@/lib/cards";
+import { User } from "@/lib/auth";
 
 function useDebounce<T>(value: T, delay: number): T {
     const [debouncedValue, setDebouncedValue] = useState<T>(value);
@@ -23,7 +24,7 @@ function useDebounce<T>(value: T, delay: number): T {
     return debouncedValue;
 }
 
-export default function Searching({ initialCards }: { initialCards: CardWithBookmarkStatus[] }) {
+export default function Searching({ initialCards, user }: { initialCards: CardWithBookmarkStatus[], user: User | null }) {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = useDebounce(searchTerm, 100);
 
@@ -98,7 +99,7 @@ export default function Searching({ initialCards }: { initialCards: CardWithBook
         <Input type="search" className="mb-[98px]" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
         {searchTerm.length > 0 && cards.length > 0 && <span className="absolute top-[180px] md:top-40 lg:top-[200px]">Results for {`"${searchTerm}"`}</span>}
         {searchTerm.length > 0 && cards.length === 0 && !isLoading ? (
-            <NoResult searchTerm={searchTerm} />
+            <NoResult searchTerm={searchTerm} user={user} />
         ) : (
             <>
                 <ul className="flex flex-wrap gap-4">

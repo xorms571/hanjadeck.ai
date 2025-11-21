@@ -4,32 +4,13 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
+import { User } from "@/lib/auth";
 
-export default function NoResult({ searchTerm }: { searchTerm: string }) {
+export default function NoResult({ searchTerm, user }: { searchTerm: string, user: User | null }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [userId, setUserId] = useState<string | null>(null); // Add userId state
     const router = useRouter();
-
-    useEffect(() => {
-        const fetchUserId = async () => {
-            try {
-                const response = await fetch('/api/auth/me');
-                if (response.ok) {
-                    const user = await response.json();
-                    setUserId(user.id);
-                } else {
-                    // Handle cases where user is not logged in or error occurs
-                    console.error('Failed to fetch user ID');
-                    setUserId(null); // Ensure userId is null if not logged in
-                }
-            } catch (err) {
-                console.error('Error fetching user ID:', err);
-                setUserId(null);
-            }
-        };
-        fetchUserId();
-    }, []); // Run once on component mount
+    const userId = user?.id || null;
 
     const handleGenerate = async () => {
         setIsLoading(true);

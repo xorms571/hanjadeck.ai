@@ -14,6 +14,7 @@ model Card {
   korean       String
   english      String
   examples     String[]
+  creatorId    String?
   createdAt    DateTime              @default(now())
   updatedAt    DateTime              @updatedAt
   bookmarkedBy Bookmark[]

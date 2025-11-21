@@ -60,12 +60,7 @@ export async function POST(req: Request) {
                 korean,
                 english,
                 examples,
-                interactions: {
-                    create: {
-                        userId,
-                        seenAt: new Date(),
-                    },
-                },
+                creatorId: userId, // Set the creator explicitly
             },
         });
 

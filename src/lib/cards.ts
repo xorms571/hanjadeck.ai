@@ -5,8 +5,6 @@ import { Card, Prisma } from '@prisma/client';
 export type CardWithBookmarkStatus = Card & {
     isBookmarked: boolean;
     creatorId?: string | null;
-    creatorName?: string | null;
-    creatorImage?: string | null;
 };
 
 export async function getTotalCardCount(): Promise<number> {
@@ -103,16 +101,12 @@ export async function getCardById(id: string, userId: string | undefined): Promi
             return null;
         }
 
-        const creatorId = card.interactions.length > 0 ? card.interactions[0].user.id : null;
-        const creatorName = card.interactions.length > 0 ? card.interactions[0].user.name : null;
-        const creatorImage = card.interactions.length > 0 ? card.interactions[0].user.imageUrl : null;
+        const creatorId = card.creatorId ?? null;
 
         return {
             ...card,
             isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
             creatorId,
-            creatorName,
-            creatorImage
         };
     } catch (error) {
         console.error(`Failed to get card with ID ${id}:`, error);
@@ -154,33 +148,9 @@ export async function getGeneratedCardsByUser(userId: string): Promise<Card[]> {
     }
 
     try {
-        // Step 1: Find the cardIds of cards created by the user.
-        // A card is considered "created" by the user if they have the first "seenAt" interaction with it.
-        const results: { cardId: string }[] = await prisma.$queryRaw(
-            Prisma.sql`
-                SELECT T1."cardId"
-                FROM "UserCardInteraction" AS T1
-                INNER JOIN (
-                    SELECT "cardId", MIN("seenAt") as min_seenAt
-                    FROM "UserCardInteraction"
-                    GROUP BY "cardId"
-                ) AS T2 ON T1."cardId" = T2."cardId" AND T1."seenAt" = T2.min_seenAt
-                WHERE T1."userId" = ${userId}
-              `
-        );
-
-        const cardIds = results.map(result => result.cardId);
-
-        if (cardIds.length === 0) {
-            return [];
-        }
-
-        // Step 2: Fetch the full card data for the identified cardIds.
         const cards = await prisma.card.findMany({
             where: {
-                id: {
-                    in: cardIds,
-                },
+                creatorId: userId,
             },
             orderBy: {
                 createdAt: 'desc',
