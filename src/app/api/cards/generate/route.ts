@@ -2,69 +2,95 @@ import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { generateCardDataFromAI } from '@/lib/ai';
 import { getCurrentUser } from '@/lib/auth';
+import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
     try {
         const session = await getCurrentUser();
-        if (!session) {
-            return new NextResponse('Unauthorized', { status: 401 });
-        }
-
         const { searchTerm, userId } = await req.json();
 
         if (!searchTerm || typeof searchTerm !== 'string' || searchTerm.trim().length === 0) {
             return NextResponse.json({ message: 'Invalid search term' }, { status: 400 });
         }
 
-        if (!userId) {
-            return new NextResponse('Unauthorized', { status: 401 });
-        }
+        const generateAndSaveCard = async (creatorId: string | null) => {
+            const aiResponse = await generateCardDataFromAI(searchTerm.trim());
 
-        // 1. Call AI to generate card data
-        const aiResponse = await generateCardDataFromAI(searchTerm.trim());
+            if (aiResponse.error) {
+                return NextResponse.json({ message: aiResponse.error }, { status: 400 });
+            }
 
-        if (aiResponse.error) {
-            return NextResponse.json({ message: aiResponse.error }, { status: 400 });
-        }
+            const { character, korean, english, examples } = aiResponse.card;
 
-        const { character, korean, english, examples } = aiResponse.card;
+            let existingCard = await prisma.card.findUnique({
+                where: { character },
+            });
 
-        // 2. Check if the card already exists
-        let existingCard = await prisma.card.findUnique({
-            where: { character },
-        });
+            if (existingCard) {
+                if (creatorId) {
+                    await prisma.userCardInteraction.upsert({
+                        where: {
+                            userId_cardId: {
+                                userId: creatorId,
+                                cardId: existingCard.id,
+                            },
+                        },
+                        update: {},
+                        create: {
+                            userId: creatorId,
+                            cardId: existingCard.id,
+                            seenAt: new Date(),
+                        },
+                    });
+                }
+                return NextResponse.json(existingCard, { status: 200 });
+            }
 
-        if (existingCard) {
-            // If card exists, create an interaction for the user if one doesn't exist
-            await prisma.userCardInteraction.upsert({
-                where: {
-                    userId_cardId: {
-                        userId,
-                        cardId: existingCard.id,
-                    },
-                },
-                update: {}, // No specific update needed, just ensure it exists
-                create: {
-                    userId,
-                    cardId: existingCard.id,
-                    seenAt: new Date(),
+            const newCard = await prisma.card.create({
+                data: {
+                    character,
+                    korean,
+                    english,
+                    examples,
+                    creatorId: creatorId,
                 },
             });
-            return NextResponse.json(existingCard, { status: 200 });
+
+            return NextResponse.json(newCard, { status: 201 });
+        };
+
+        if (session && userId) {
+            return await generateAndSaveCard(userId);
+        } else {
+            const cookieStore = await cookies();
+            const generationCountCookie = cookieStore.get('generation-count');
+            let count = generationCountCookie ? parseInt(generationCountCookie.value, 10) : 0;
+            if (isNaN(count)) {
+                count = 0;
+            }
+
+            if (count >= 3) {
+                return NextResponse.json({ message: 'Guest generation limit exceeded. Please log in to continue.' }, { status: 429 });
+            }
+
+            const generationResponse = await generateAndSaveCard(null);
+
+            if (generationResponse.status >= 400) {
+                return generationResponse;
+            }
+
+            const cardData = await generationResponse.json();
+            const response = NextResponse.json(cardData, { status: generationResponse.status });
+
+            response.cookies.set({
+                name: 'generation-count',
+                value: String(count + 1),
+                path: '/',
+                maxAge: 60 * 60 * 24, // 24 hours
+            });
+
+            return response;
         }
-
-        // 3. Save the new card to the database
-        const newCard = await prisma.card.create({
-            data: {
-                character,
-                korean,
-                english,
-                examples,
-                creatorId: userId, // Set the creator explicitly
-            },
-        });
-
-        return NextResponse.json(newCard, { status: 201 });
 
     } catch (error) {
         console.error('Card generation API error:', error);

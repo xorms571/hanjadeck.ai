@@ -16,14 +16,6 @@ export default function NoResult({ searchTerm, user }: { searchTerm: string, use
         setIsLoading(true);
         setError(null);
 
-        // Ensure userId is available before attempting to generate
-        if (!userId) {
-            alert("You need to log in to generate flashcards.");
-            router.push('/login');
-            setIsLoading(false);
-            return;
-        }
-
         try {
             const response = await fetch('/api/cards/generate', {
                 method: 'POST',
@@ -34,6 +26,11 @@ export default function NoResult({ searchTerm, user }: { searchTerm: string, use
             });
 
             const result = await response.json();
+
+            if (response.status === 429) {
+                alert('You have reached the maximum number of flashcard generations for today. Please try again tomorrow.');
+                router.replace('/login');
+            }
 
             if (!response.ok) {
                 throw new Error(result.message || 'Failed to generate flashcard.');
@@ -50,7 +47,7 @@ export default function NoResult({ searchTerm, user }: { searchTerm: string, use
 
     return (
         <div className="flex justify-center flex-col items-center mt-[196px] text-center">
-            <Image src='/no-result.svg' alt="no result icon" width={120} height={120}/>
+            <Image src='/no-result.svg' alt="no result icon" width={120} height={120} />
             <h4 className="mt-8 mb-4">{`"${searchTerm}" not found`}</h4>
             <p className="max-w-[453px] font-medium text-center mb-8">Would you like to generate this flashcard with AI? It will be automatically saved to your collection.</p>
             <Button onClick={handleGenerate} disabled={isLoading}>
