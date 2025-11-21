@@ -4,14 +4,15 @@ import Image from 'next/image';
 
 interface BookmarkedCardsListProps {
   bookmarkedCards: CardWithBookmarkStatus[];
+  isCurrentUserDashboard: boolean;
 }
 
-export default function BookmarkedCardsList({ bookmarkedCards }: BookmarkedCardsListProps) {
+export default function BookmarkedCardsList({ bookmarkedCards, isCurrentUserDashboard }: BookmarkedCardsListProps) {
   if (bookmarkedCards.length === 0) {
     return (
       <>
-        <p>You haven't bookmarked any cards yet.</p>
-        <Link href="/learn" className="text-(--primary) hover:underline">Start learning!</Link>
+        {isCurrentUserDashboard ? <p>You haven't bookmarked any cards yet.</p> : <p>This user hasn't bookmarked any cards yet.</p>}
+        {isCurrentUserDashboard && <Link href="/learn" className="text-(--primary) hover:underline">Start learning!</Link>}
       </>
     );
   }

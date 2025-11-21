@@ -4,6 +4,7 @@ import { CardWithBookmarkStatus } from "@/lib/cards"; // Import the extended Car
 import Container from "@/app/components/Container";
 import Image from "next/image";
 import UserProfilePicture from "./UserProfilePicture";
+import Link from "next/link";
 
 interface FlipCardProps {
     card: CardWithBookmarkStatus;
@@ -13,7 +14,7 @@ interface FlipCardProps {
 export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
 
     const [flipped, setFlipped] = useState(false); //카드 뒤집기 상태 관리
-    const { character, korean, english, examples, id, createdAt, creatorName, creatorImage } = card; //현재 카드 데이터
+    const { character, korean, english, examples, id, createdAt, creatorName, creatorImage, creatorId } = card; //현재 카드 데이터
 
     // Initialize isBookmarked state only if bookmarking is enabled
     const [isBookmarked, setIsBookmarked] = useState(onBookmarkToggle ? card.isBookmarked : false);
@@ -53,6 +54,8 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
 
     const baseContainerStyle = "w-full flex flex-col items-center px-4 py-3 md:px-6 md:py-6 absolute inset-0 backface-hidden rounded-[20px]! duration-100"
 
+    const targetUserId = creatorId || undefined;
+
     return (
         <div className="perspective-[1000px] w-full max-w-[796px] h-[calc(100vh-180px)] md:h-[515px]">
             <div
@@ -72,9 +75,9 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                             </button>
                         )*/}
                         <p>{createdAt.toLocaleString("en")}</p>
-                        {creatorName && <p className="text-sm text-gray-500 h-[27px] flex gap-2">
-                            Created by <UserProfilePicture imageUrl={creatorImage} size={27} /> {creatorName}
-                        </p>}
+                        {creatorName && <div className="text-[18px] text-gray-500 h-[27px] flex gap-2">
+                            Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={27} /> <Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link>
+                        </div>}
                     </div>
                     <div className="text-center">
                         <h1 className={character.length > 4 ? "text-[36px]!" : ""}>{character}</h1>
@@ -106,9 +109,9 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                             </button>
                         )*/}
                         <p>{createdAt.toLocaleString("en")}</p>
-                        {creatorName && <p className="text-sm text-gray-500 h-[27px] flex gap-2">
+                        {creatorName && <div className="text-[18px] text-gray-500 h-[27px] flex gap-2">
                             Created by <UserProfilePicture imageUrl={creatorImage} size={27} /> {creatorName}
-                        </p>}
+                        </div>}
                     </div>
                     <div className="text-center">
                         <h1 className={character.length > 4 ? "text-[36px]!" : ""}>{character}</h1>

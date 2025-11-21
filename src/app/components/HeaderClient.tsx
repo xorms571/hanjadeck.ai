@@ -18,7 +18,7 @@ export default function HeaderClient({ user }: { user: User | null }) {
     }, [pathname]);
 
     const isIntroPageThenHidden = pathname.includes('intro') && "hidden!";
-    const isUserLoggedInThenDashboardOrIntro = user ? "/dashboard" : "/login";
+    const isUserLoggedInThenDashboardOrIntro = user ? `/dashboard/${user.id}` : "/login";
 
     return (
         <header className={`${isMenuOpen?"":"backdrop-blur-md"} w-full z-152 flex justify-between items-center font-bold]`}>
@@ -40,11 +40,10 @@ export default function HeaderClient({ user }: { user: User | null }) {
             {/* Navigation */}
             <nav className={`${isIntroPageThenHidden} ${isMenuOpen ? 'flex pt-26! pb-6! pl-6! pr-8! text-sm! md:text-lg! md:p-0!' : 'hidden'} w-full font-bold! items-end justify-end backdrop-blur-md z-151 flex-col-reverse absolute top-0 left-0 shadow rounded-b-lg gap-4 md:flex md:static md:flex-row md:bg-transparent md:shadow-none md:p-0 md:items-center md:gap-14`}>
                 <Link href='/learn' className="text-right leading-7">Study</Link>
-                <Link href='/dashboard' className="text-right leading-7">Dashboard</Link>
                 {!user && <Link href='/signup' className="text-right leading-7">Sign Up</Link>}
                 {!user && <Link href='/login' className="text-right leading-7">Login</Link>}
                 {user && <LogoutButton />}
-                {user && <UserProfilePicture imageUrl={user.imageUrl} size={40} />}
+                {user && <UserProfilePicture imageUrl={user.imageUrl} targetUserId={user.id} size={40} />}
             </nav>
         </header>
     )

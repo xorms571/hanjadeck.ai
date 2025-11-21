@@ -7,9 +7,10 @@ import { useRouter } from 'next/navigation';
 
 interface ProfileImageUpdaterProps {
   initialImageUrl: string | null;
+  userId: string; // Add userId prop
 }
 
-export default function ProfileImageUpdater({ initialImageUrl }: ProfileImageUpdaterProps) {
+export default function ProfileImageUpdater({ initialImageUrl, userId }: ProfileImageUpdaterProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState(initialImageUrl);
@@ -59,7 +60,7 @@ export default function ProfileImageUpdater({ initialImageUrl }: ProfileImageUpd
 
   return (
     <div className="relative flex flex-col items-center h-[180px]">
-      <div 
+      <div
         className="relative group cursor-pointer h-full"
         onClick={handlePictureClick}
         onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handlePictureClick(); }}
@@ -67,7 +68,7 @@ export default function ProfileImageUpdater({ initialImageUrl }: ProfileImageUpd
         tabIndex={0}
         aria-label="Change profile picture"
       >
-        <UserProfilePicture imageUrl={imageUrl} />
+        <UserProfilePicture imageUrl={imageUrl} targetUserId={userId} /> {/* Pass userId as targetUserId */}
         <div className="absolute inset-0 bg-(--primary)/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-full">
           <span className="text-white">Change</span>
         </div>

@@ -77,3 +77,41 @@ export async function getCurrentUser(): Promise<User | null> {
     return null;
   }
 }
+
+export async function getUserById(userId: string): Promise<User | null> {
+  if (!userId) {
+    return null;
+  }
+  try {
+    let user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        imageUrl: true,
+        role: true,
+        streak: true,
+        learnedCount: true,
+        masteredCount: true,
+        reviewCount: true,
+        lastSeenAt: true,
+        bookmarks: {
+            select: {
+                card: true,
+            },
+        },
+      },
+    });
+
+    if (user) {
+        return user as User;
+    }
+
+    return null;
+
+  } catch (error) {
+    console.error('Error fetching user by ID:', error);
+    return null;
+  }
+}

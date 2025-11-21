@@ -1,9 +1,10 @@
 import prisma from '@/lib/prisma';
-import { Card } from '@prisma/client';
+import { Card, Prisma } from '@prisma/client';
 
 // Define a new type that extends Card with bookmark status
 export type CardWithBookmarkStatus = Card & {
     isBookmarked: boolean;
+    creatorId?: string | null;
     creatorName?: string | null;
     creatorImage?: string | null;
 };
@@ -88,6 +89,7 @@ export async function getCardById(id: string, userId: string | undefined): Promi
                     include: {
                         user: {
                             select: {
+                                id: true,
                                 name: true,
                                 imageUrl: true,
                             },
@@ -101,12 +103,14 @@ export async function getCardById(id: string, userId: string | undefined): Promi
             return null;
         }
 
+        const creatorId = card.interactions.length > 0 ? card.interactions[0].user.id : null;
         const creatorName = card.interactions.length > 0 ? card.interactions[0].user.name : null;
         const creatorImage = card.interactions.length > 0 ? card.interactions[0].user.imageUrl : null;
 
         return {
             ...card,
             isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
+            creatorId,
             creatorName,
             creatorImage
         };
@@ -140,6 +144,52 @@ export async function searchCards(userId: string | undefined, query: string): Pr
         }));
     } catch (error) {
         console.error("Failed to search cards:", error);
+        return [];
+    }
+}
+
+export async function getGeneratedCardsByUser(userId: string): Promise<Card[]> {
+    if (!userId) {
+        return [];
+    }
+
+    try {
+        // Step 1: Find the cardIds of cards created by the user.
+        // A card is considered "created" by the user if they have the first "seenAt" interaction with it.
+        const results: { cardId: string }[] = await prisma.$queryRaw(
+            Prisma.sql`
+                SELECT T1."cardId"
+                FROM "UserCardInteraction" AS T1
+                INNER JOIN (
+                    SELECT "cardId", MIN("seenAt") as min_seenAt
+                    FROM "UserCardInteraction"
+                    GROUP BY "cardId"
+                ) AS T2 ON T1."cardId" = T2."cardId" AND T1."seenAt" = T2.min_seenAt
+                WHERE T1."userId" = ${userId}
+              `
+        );
+
+        const cardIds = results.map(result => result.cardId);
+
+        if (cardIds.length === 0) {
+            return [];
+        }
+
+        // Step 2: Fetch the full card data for the identified cardIds.
+        const cards = await prisma.card.findMany({
+            where: {
+                id: {
+                    in: cardIds,
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
+
+        return cards;
+    } catch (error) {
+        console.error("Failed to get generated cards by user:", error);
         return [];
     }
 }

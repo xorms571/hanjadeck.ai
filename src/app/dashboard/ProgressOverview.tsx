@@ -24,7 +24,14 @@ export default function ProgressOverview({ user, review }: { user: User, review:
             {progressMeta.map((item) => (
                 <li key={item.key}>
                     <Container className="flex flex-col p-4! md:p-6! md:flex-row gap-4 aspect-square md:aspect-auto justify-center md:justify-start md:items-center" shadow>
-                        <div className="w-8 aspect-square relative md:w-[68px]"><Image src={item.icon} alt={item.alt} fill /></div>
+                        <div className="w-8 aspect-square relative md:w-[68px]">
+                            <Image
+                                src={item.icon}
+                                alt={item.alt}
+                                fill
+                                sizes="(min-width: 768px) 68px, 32px"
+                            />
+                        </div>
                         <div className="truncate">
                             <span className="text-[#474141] text-[16px] md:text-[22px]">{item.title}</span>
                             <h3 className="text-[22px]! md:text-[28px]!">{progress[item.key]} {" "}
