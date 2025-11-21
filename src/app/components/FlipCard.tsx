@@ -93,8 +93,8 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                                 <Image src={imageSrc} fill alt={altText} />
                             </button>
                         )*/}
-                        <p>{createdAt.toLocaleString("en")}</p>
-                        {creatorName && <div className="text-[18px] text-gray-500 h-[27px] flex gap-2 z-10">
+                        <p className="text-gray-500! text-[14px]! md:text-[18px]!">{createdAt.toLocaleString("en")}</p>
+                        {creatorName && <div className="hidden md:flex text-[18px] text-gray-500 h-[27px] gap-2 z-10">
                             Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={27} /> <div onClick={handleClick}><Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link></div>
                         </div>}
                     </div>
@@ -116,19 +116,22 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                                 </li>
                             ))}
                         </ul>
+                        {creatorName && <div className="flex mt-2 md:hidden text-[14px] text-gray-500 gap-2 z-10 items-end justify-end w-full">
+                            Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={18} /> <div onClick={handleClick}><Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link></div>
+                        </div>}
                     </div>
                 </Container>
 
                 {/* Back Face */}
                 <Container className={`${baseContainerStyle} justify-between transform-[rotateY(180deg)]`} shadow>
-                    <div className="flex justify-between items-center text-end w-full">
+                    <div className="flex justify-between text-end w-full">
                         {/*onBookmarkToggle && ( // Conditionally render button
                             <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
                                 <Image src={imageSrc} fill alt={altText} />
                             </button>
                         )*/}
-                        <p>{createdAt.toLocaleString("en")}</p>
-                        {creatorName && <div className="text-[18px] text-gray-500 h-[27px] flex gap-2 z-10">
+                        <p className="text-gray-500 text-[14px]! md:text-[18px]!">{createdAt.toLocaleString("en")}</p>
+                        {creatorName && <div className="hidden md:flex text-[18px] text-gray-500 h-[27px] gap-2 z-10">
                             Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={27} /> <div onClick={handleClick}><Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link></div>
                         </div>}
                     </div>
@@ -150,6 +153,9 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                                 </li>
                             ))}
                         </ul>
+                        {creatorName && <div className="flex mt-2 md:hidden text-[14px] text-gray-500 gap-2 z-10 items-end justify-end w-full">
+                            Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={18} /> <div onClick={handleClick}><Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link></div>
+                        </div>}
                     </div>
                 </Container>
             </div>
