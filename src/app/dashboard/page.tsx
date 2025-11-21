@@ -3,12 +3,12 @@ import { redirect } from 'next/navigation';
 import { getCurrentUser } from "@/lib/auth";
 import { getTotalCardCount } from "@/lib/cards"; // Import getTotalCardCount
 import Container from "@/app/components/Container";
-import ProgressOverview from "./ProgressOverview";
-import UserProfilePicture from "../components/UserProfilePicture";
+import ProfileImageUpdater from "./ProfileImageUpdater";
 import OverallProgress from "./OverallProgress";
 import BookmarkedCardsList from "./BookmarkedCardsList"; // Import BookmarkedCardsList
 import GreetingWithUserName from "./GreetingWithUserName";
 import Button from "../components/Button";
+import ProgressOverview from "./ProgressOverview";
 
 export default async function DashboardPage() {
     const user = await getCurrentUser();
@@ -32,7 +32,7 @@ export default async function DashboardPage() {
                     <ProgressOverview user={user} review={bookmarkedCards.length} />
                 </div>
                 <Container className="flex flex-col items-center gap-8" shadow>
-                    <UserProfilePicture imageUrl={user.imageUrl} />
+                    <ProfileImageUpdater initialImageUrl={user.imageUrl} />
                     <Container className="border-[#D9D9D9] border flex flex-col gap-4">
                         <h3>Overall Progress</h3>
                         <OverallProgress user={user} totalCards={totalCards} />
