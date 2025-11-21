@@ -3,6 +3,7 @@ import { useState } from "react";
 import { CardWithBookmarkStatus } from "@/lib/cards"; // Import the extended Card type
 import Container from "@/app/components/Container";
 import Image from "next/image";
+import UserProfilePicture from "./UserProfilePicture";
 
 interface FlipCardProps {
     card: CardWithBookmarkStatus;
@@ -12,7 +13,8 @@ interface FlipCardProps {
 export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
 
     const [flipped, setFlipped] = useState(false); //카드 뒤집기 상태 관리
-    const { character, korean, english, examples, id } = card; //현재 카드 데이터
+    const { character, korean, english, examples, id, createdAt, creatorName, creatorImage } = card; //현재 카드 데이터
+
     // Initialize isBookmarked state only if bookmarking is enabled
     const [isBookmarked, setIsBookmarked] = useState(onBookmarkToggle ? card.isBookmarked : false);
 
@@ -36,7 +38,7 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
         );
     };
 
-    const handleBookmarkToggle = async (e: React.MouseEvent) => {
+    {/*const handleBookmarkToggle = async (e: React.MouseEvent) => {
         e.stopPropagation(); //카드 뒤집기 이벤트 방지
         if (onBookmarkToggle) { // Only proceed if bookmarking is enabled
             const newIsBookmarked = !isBookmarked; //북마크 상태 토글
@@ -47,7 +49,8 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
         }
     }
     const imageSrc = isBookmarked ? "/bookmarked.svg" : "/unmarked.svg"
-    const altText = isBookmarked ? "bookmarked card" : "unmarked card"
+    const altText = isBookmarked ? "bookmarked card" : "unmarked card"*/}
+
     const baseContainerStyle = "w-full flex flex-col items-center px-4 py-3 md:px-6 md:py-6 absolute inset-0 backface-hidden rounded-[20px]! duration-100"
 
     return (
@@ -62,16 +65,20 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
             >
                 {/* Front Face */}
                 <Container className={`${baseContainerStyle} justify-between`} shadow>
-                    <div className="text-end w-full">
-                        {onBookmarkToggle && ( // Conditionally render button
+                    <div className="flex justify-between text-end w-full">
+                        {/*onBookmarkToggle && ( // Conditionally render button
                             <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
                                 <Image src={imageSrc} fill alt={altText} />
                             </button>
-                        )}
+                        )*/}
+                        <p>{createdAt.toLocaleString("en")}</p>
+                        {creatorName && <p className="text-sm text-gray-500 h-[27px] flex gap-2">
+                            Created by <UserProfilePicture imageUrl={creatorImage} size={27} /> {creatorName}
+                        </p>}
                     </div>
                     <div className="text-center">
-                        <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
-                        <h2 className={`${character.length>4?"text-[36px]!":""} opacity-0`}>{korean}</h2>
+                        <h1 className={character.length > 4 ? "text-[36px]!" : ""}>{character}</h1>
+                        <h2 className={`${character.length > 4 ? "text-[36px]!" : ""} opacity-0`}>{korean}</h2>
                         <p className="opacity-0">{english}</p>
                     </div>
                     <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base opacity-0">
@@ -82,8 +89,8 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                                     {index === 0 && korean
                                         ? highlightText(example, korean, "text-(--primary) font-bold")
                                         : index === 1 && english
-                                        ? highlightText(example, english, "text-(--primary) font-bold")
-                                        : example}
+                                            ? highlightText(example, english, "text-(--primary) font-bold")
+                                            : example}
                                 </li>
                             ))}
                         </ul>
@@ -92,16 +99,20 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
 
                 {/* Back Face */}
                 <Container className={`${baseContainerStyle} justify-between transform-[rotateY(180deg)]`} shadow>
-                    <div className="text-end w-full">
-                        {onBookmarkToggle && ( // Conditionally render button
+                    <div className="flex justify-between items-center text-end w-full">
+                        {/*onBookmarkToggle && ( // Conditionally render button
                             <button className="w-7 h-7 md:w-12 md:h-12 relative" onClick={(e) => handleBookmarkToggle(e)}>
                                 <Image src={imageSrc} fill alt={altText} />
                             </button>
-                        )}
+                        )*/}
+                        <p>{createdAt.toLocaleString("en")}</p>
+                        {creatorName && <p className="text-sm text-gray-500 h-[27px] flex gap-2">
+                            Created by <UserProfilePicture imageUrl={creatorImage} size={27} /> {creatorName}
+                        </p>}
                     </div>
                     <div className="text-center">
-                        <h1 className={character.length>4?"text-[36px]!":""}>{character}</h1>
-                        <h2 className={character.length>4?"text-[36px]!":""}>{korean}</h2>
+                        <h1 className={character.length > 4 ? "text-[36px]!" : ""}>{character}</h1>
+                        <h2 className={character.length > 4 ? "text-[36px]!" : ""}>{korean}</h2>
                         <p>{english}</p>
                     </div>
                     <div className="w-full mt-2.5 md:mt-5 text-sm md:text-base">
@@ -112,8 +123,8 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                                     {index === 0 && korean
                                         ? highlightText(example, korean, "text-(--primary) font-bold")
                                         : index === 1 && english
-                                        ? highlightText(example, english, "text-(--primary) font-bold")
-                                        : example}
+                                            ? highlightText(example, english, "text-(--primary) font-bold")
+                                            : example}
                                 </li>
                             ))}
                         </ul>

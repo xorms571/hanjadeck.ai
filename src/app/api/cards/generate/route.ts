@@ -10,10 +10,14 @@ export async function POST(req: Request) {
             return new NextResponse('Unauthorized', { status: 401 });
         }
 
-        const { searchTerm } = await req.json();
+        const { searchTerm, userId } = await req.json();
 
         if (!searchTerm || typeof searchTerm !== 'string' || searchTerm.trim().length === 0) {
             return NextResponse.json({ message: 'Invalid search term' }, { status: 400 });
+        }
+
+        if (!userId) {
+            return new NextResponse('Unauthorized', { status: 401 });
         }
 
         // 1. Call AI to generate card data
@@ -26,11 +30,26 @@ export async function POST(req: Request) {
         const { character, korean, english, examples } = aiResponse.card;
 
         // 2. Check if the card already exists
-        const existingCard = await prisma.card.findUnique({
+        let existingCard = await prisma.card.findUnique({
             where: { character },
         });
 
         if (existingCard) {
+            // If card exists, create an interaction for the user if one doesn't exist
+            await prisma.userCardInteraction.upsert({
+                where: {
+                    userId_cardId: {
+                        userId,
+                        cardId: existingCard.id,
+                    },
+                },
+                update: {}, // No specific update needed, just ensure it exists
+                create: {
+                    userId,
+                    cardId: existingCard.id,
+                    seenAt: new Date(),
+                },
+            });
             return NextResponse.json(existingCard, { status: 200 });
         }
 
@@ -41,6 +60,12 @@ export async function POST(req: Request) {
                 korean,
                 english,
                 examples,
+                interactions: {
+                    create: {
+                        userId,
+                        seenAt: new Date(),
+                    },
+                },
             },
         });
 

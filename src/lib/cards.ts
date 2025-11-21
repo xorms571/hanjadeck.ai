@@ -4,6 +4,8 @@ import { Card } from '@prisma/client';
 // Define a new type that extends Card with bookmark status
 export type CardWithBookmarkStatus = Card & {
     isBookmarked: boolean;
+    creatorName?: string | null;
+    creatorImage?: string | null;
 };
 
 export async function getTotalCardCount(): Promise<number> {
@@ -78,6 +80,20 @@ export async function getCardById(id: string, userId: string | undefined): Promi
                     where: { userId },
                     select: { userId: true }
                 } : false,
+                interactions: {
+                    orderBy: {
+                        seenAt: 'asc',
+                    },
+                    take: 1,
+                    include: {
+                        user: {
+                            select: {
+                                name: true,
+                                imageUrl: true,
+                            },
+                        },
+                    },
+                },
             }
         });
 
@@ -85,9 +101,14 @@ export async function getCardById(id: string, userId: string | undefined): Promi
             return null;
         }
 
+        const creatorName = card.interactions.length > 0 ? card.interactions[0].user.name : null;
+        const creatorImage = card.interactions.length > 0 ? card.interactions[0].user.imageUrl : null;
+
         return {
             ...card,
             isBookmarked: card.bookmarkedBy ? card.bookmarkedBy.length > 0 : false,
+            creatorName,
+            creatorImage
         };
     } catch (error) {
         console.error(`Failed to get card with ID ${id}:`, error);

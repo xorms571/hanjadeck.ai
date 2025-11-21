@@ -1,18 +1,47 @@
 'use client';
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
 
 export default function NoResult({ searchTerm }: { searchTerm: string }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [userId, setUserId] = useState<string | null>(null); // Add userId state
     const router = useRouter();
+
+    useEffect(() => {
+        const fetchUserId = async () => {
+            try {
+                const response = await fetch('/api/auth/me');
+                if (response.ok) {
+                    const user = await response.json();
+                    setUserId(user.id);
+                } else {
+                    // Handle cases where user is not logged in or error occurs
+                    console.error('Failed to fetch user ID');
+                    setUserId(null); // Ensure userId is null if not logged in
+                }
+            } catch (err) {
+                console.error('Error fetching user ID:', err);
+                setUserId(null);
+            }
+        };
+        fetchUserId();
+    }, []); // Run once on component mount
 
     const handleGenerate = async () => {
         setIsLoading(true);
         setError(null);
+
+        // Ensure userId is available before attempting to generate
+        if (!userId) {
+            alert("You need to log in to generate flashcards.");
+            router.push('/login');
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const response = await fetch('/api/cards/generate', {
@@ -20,14 +49,8 @@ export default function NoResult({ searchTerm }: { searchTerm: string }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ searchTerm }),
+                body: JSON.stringify({ searchTerm, userId }), // Include userId
             });
-
-            if (response.status === 401) {
-                alert("You need to log in to generate flashcards.");
-                router.push('/login');
-                return;
-            }
 
             const result = await response.json();
 
@@ -53,7 +76,7 @@ export default function NoResult({ searchTerm }: { searchTerm: string }) {
                 {isLoading ? 'Generating...' : 'Generate New Flashcard'}
             </Button>
             {error && (
-                <p className="mt-4 text-red-500!">{error}</p>
+                <p className="mt-4 w-3/4 text-red-500!">{error}</p>
             )}
         </div>
     );
