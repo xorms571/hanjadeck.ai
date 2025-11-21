@@ -119,7 +119,7 @@ function Done() {
     return (
         <>
             <Image className="px-6 md:px-16 h-[390px]! top-1/2! -translate-y-1/2" fill src="/all-set.svg" alt="Done Image" />
-            <Button onClick={() => router.push('/dashboard')} className="mt-[525.69px] md:mt-[570px] max-w-full">Done</Button>
+            <Button onClick={() => router.push('/login')} className="mt-[525.69px] md:mt-[570px] max-w-full">Done</Button>
         </>
     );
 }
@@ -241,7 +241,7 @@ export default function SignUpPage() {
     }, [errors])
 
     return (
-        <Container className="max-w-[674px] h-[779.7px] relative md:h-[862px] p-6 md:px-16 md:py-10 flex flex-col justify-between">
+        <Container className="mx-auto lg:mx-0 max-w-[674px] h-[779.7px] relative md:h-[862px] p-6 md:px-16 md:py-10 flex flex-col justify-between">
             <div>
                 <StepBar currentStep={step} totalSteps={steps.length} />
                 <h3 className="font-bold text-[22px]! md:text-[32px]! mb-12">{steps[step].title}</h3>

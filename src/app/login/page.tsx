@@ -7,6 +7,7 @@ import Container from '../components/Container';
 import Input from '../components/Input';
 import Button from '../components/Button';
 import BackgroundImage from '../components/BackgroundImage';
+
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,7 +30,8 @@ export default function LoginPage() {
       });
 
       if (response.ok) {
-        router.push('/dashboard');
+        const { user } = await response.json();
+        router.push(`/dashboard/${user.id}`);
         router.refresh(); // To ensure the server-side state is updated
       } else {
         setError('Invalid email or password. Please try again.');
@@ -43,7 +45,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Container className="max-w-[674px] h-[779.7px] relative md:h-[862px] p-6 md:px-16 md:py-10 flex flex-col">
+    <Container className="mx-auto lg:mx-0 max-w-[674px] h-[779.7px] relative md:h-[862px] p-6 md:px-16 md:py-10 flex flex-col">
       <h3 className="font-bold text-[22px]! md:text-[32px]! mb-12 mt-[58px]">Log in to your Account</h3>
       <form className="flex flex-col h-full justify-between" onSubmit={handleSubmit}>
         <div>
