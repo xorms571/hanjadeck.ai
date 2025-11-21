@@ -104,9 +104,9 @@ export default function Searching({ initialCards }: { initialCards: CardWithBook
                 <ul className="flex flex-wrap gap-4">
                     {cards.map((card) => (
                         <li key={card.id} className="md:text-[32px] w-[calc(50%-8px)] lg:w-[calc(25%-12px)] h-40 md:h-[232px]">
-                            <Container className="h-full font-bold shadow! rounded-[20px]!">
+                            <Container className="h-full font-bold shadow! rounded-[20px]! hover:bg-(--primary) hover:text-(--secondary-white) transition-colors">
                                 <Link className="w-full h-full flex justify-center items-center text-center" href={`learn/${card.id}`}>
-                                    {card.korean}
+                                    {card.character}
                                 </Link>
                             </Container>
                         </li>

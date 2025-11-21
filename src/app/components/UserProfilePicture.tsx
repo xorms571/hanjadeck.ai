@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation';
 export default function UserProfilePicture({ imageUrl, size = 180, targetUserId }: { imageUrl: string | null | undefined, size?: number, targetUserId?: string }) {
     const router = useRouter();
 
-    const handleClick = () => {
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.stopPropagation();
         if (targetUserId) {
             router.push(`/dashboard/${targetUserId}`);
         }

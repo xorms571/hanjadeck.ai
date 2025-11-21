@@ -245,11 +245,11 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
             <div className="flex justify-between items-center">
                 <div className="flex">
                     {user?.role === 'ADMIN' && (
-                        <Button onClick={handleEditToggle} background="secondary" className="h-7! mr-2 w-12! max-w-16! text-sm">
+                        <Button onClick={handleEditToggle} background="secondary" className="h-7! mr-2 w-16! max-w-16! text-sm">
                             {isEditing ? 'Cancel' : 'Edit'}
                         </Button>
                     )}
-                    <Button onClick={() => router.push('/learn')} className="h-7! max-w-16! w-12! text-sm">
+                    <Button onClick={() => router.push('/learn')} className="h-7! max-w-16! w-16! text-sm">
                         Back
                     </Button>
                 </div>

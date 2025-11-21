@@ -56,6 +56,11 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
 
     const targetUserId = creatorId || undefined;
 
+    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
     return (
         <div className="perspective-[1000px] w-full max-w-[796px] h-[calc(100vh-180px)] md:h-[515px]">
             <div
@@ -76,7 +81,7 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                         )*/}
                         <p>{createdAt.toLocaleString("en")}</p>
                         {creatorName && <div className="text-[18px] text-gray-500 h-[27px] flex gap-2">
-                            Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={27} /> <Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link>
+                            Created by <UserProfilePicture imageUrl={creatorImage} targetUserId={targetUserId} size={27} /> <div onClick={handleClick}><Link className="hover:underline" href={`/dashboard/${targetUserId}`}>{creatorName}</Link></div>
                         </div>}
                     </div>
                     <div className="text-center">
