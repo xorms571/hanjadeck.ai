@@ -36,13 +36,15 @@ export default async function IntroPage() {
                 </Link>
             </div>
             <div className="w-full min-h-screen overflow-hidden top-0 absolute left-0">
-                {cardClasses.map((className, index) => {
-                    return (
-                        <div key={index} className={className}>
-                            <FlipCard card={cards[cardIndexes[index]]} />
-                        </div>
-                    );
-                })}
+                <div className="hidden md:block">
+                    {cardClasses.map((className, index) => {
+                        return (
+                            <div key={index} className={className}>
+                                <FlipCard card={cards[cardIndexes[index]]} />
+                            </div>
+                        );
+                    })}
+                </div>
                 <SvgPathAnimationCSS strokeWidth={60} color="#7745D7" top="top-50 lg:top-80" />
                 <SvgPathAnimationCSS strokeWidth={30} color="#E0E0E3" zIndex="-z-35" top="top-20 lg:top-30" className="rotate-175" transition={2.5} />
                 <SvgPathAnimationCSS strokeWidth={10} color="#fff" zIndex="-z-10" top="top-40 lg:top-60" className="-rotate-180" transition={1.5} />
