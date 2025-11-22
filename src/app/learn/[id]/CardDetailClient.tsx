@@ -311,7 +311,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
                 </Container>
             </div>
             {/*{showLearningTip && <LearningTip learningTipHandler={learningTipHandler} />}*/}
-            <div className="max-w-[536px] mt-[72px] mx-auto hidden md:flex justify-between gap-5! md:gap-14!">
+            <div className="max-w-[536px] mt-5 md:mt-[72px] mx-auto flex justify-between gap-5! md:gap-14!">
                 <Button
                     onClick={handleUnknown}
                     background="secondary"
