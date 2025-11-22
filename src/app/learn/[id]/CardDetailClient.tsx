@@ -306,7 +306,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
                         <FlipCard card={card} onBookmarkToggle={onBookmarkToggle} />
                     )}
                 </div>
-                <Container className={`-z-10 h-[calc(100vh-180px)] md:h-[515px] absolute top-0 bg-(--primary)/20! shadow-inner flex justify-center items-center w-full`}>
+                <Container className={`-z-10 h-[calc(100vh-280px)] md:h-[515px] absolute top-0 bg-(--primary)/20! shadow-inner flex justify-center items-center w-full`}>
                     <Image className="opacity-50" src="/logo-lg.svg" alt="logo icon" width={150} height={150} />
                 </Container>
             </div>

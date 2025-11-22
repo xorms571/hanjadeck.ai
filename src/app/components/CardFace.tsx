@@ -49,7 +49,7 @@ export const CardFace = ({
 
     return (
         <Container
-            className={`${baseContainerStyle} justify-between ${!isFront ? "transform-[rotateY(180deg)]" : ""} overflow-hidden`}
+            className={`${baseContainerStyle} justify-between ${!isFront ? "transform-[rotateY(180deg)]" : ""} overflow-hidden z-60`}
             shadow
         >
             <button className={`${showTips && "text-white!"} z-50 mr-auto text-black hover:text-(--primary) cursor-pointer`} onClick={handleClick}>
@@ -79,7 +79,7 @@ export const CardFace = ({
             </div>*/}
 
             {/* Middle */}
-            <div className="text-center mt-10">
+            <div className="text-center">
                 <h1 className={`${character.length > 4 ? "text-[36px]!" : ""}`}>
                     {isFront ? character : korean}
                 </h1>
@@ -119,7 +119,7 @@ export const CardFace = ({
                 )}*/}
             </div>
 
-            <div className={`${showTips ? "flex" : "hidden"} absolute top-1/2 w-full h-full -translate-y-1/2 p-6 bg-black/50 text-white text-xs md:text-sm left-0 justify-between gap-10`}>
+            <div className={`${showTips ? "flex" : "hidden"} absolute top-1/2 w-full h-full -translate-y-1/2 p-6 bg-black/70 text-white text-xs md:text-sm left-0 justify-between gap-10`}>
                 <div className={`${isFront && "opacity-0"} flex flex-col justify-center items-start w-30`}>
                     <div className="w-5 h-7 rounded bg-white fade-left shadow" />
                     <b className="fade-left">👆</b>
