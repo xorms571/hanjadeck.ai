@@ -78,15 +78,12 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                 aria-pressed={flipped}
                 onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") setFlipped(v => !v); }}
             >
-
                 {/* Front Face */}
                 <CardFace handleClick={handleClick} isFront={true} showTips={showTips} {...props} />
 
                 {/* Back Face */}
                 <CardFace handleClick={handleClick} isFront={false} showTips={showTips} {...props} />
             </div>
-
-
         </div>
     )
 }

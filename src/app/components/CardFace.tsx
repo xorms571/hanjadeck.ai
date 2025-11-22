@@ -80,10 +80,9 @@ export const CardFace = ({
 
             {/* Middle */}
             <div className="text-center mt-10">
-                <h1 className={character.length > 4 ? "text-[36px]!" : ""}>{character}</h1>
-                <h2 className={`${character.length > 4 ? "text-[36px]!" : ""} ${hidden}`}>
-                    {korean}
-                </h2>
+                <h1 className={`${character.length > 4 ? "text-[36px]!" : ""}`}>
+                    {isFront ? character : korean}
+                </h1>
                 <p className={hidden}>{english}</p>
             </div>
 
