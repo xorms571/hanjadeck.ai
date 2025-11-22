@@ -11,7 +11,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({ label, type = 'text', className, onChange, value, error, ...props }) => {
-  const inputBasedWrapStyle = 'w-full py-4 text-[16px] md:text-[22px] focus:outline-none rounded-4xl h-[58px] box-border relative focus:bg-(--primary)/5'
+  const inputBasedWrapStyle = 'w-full py-4 bg-white text-[16px] md:text-[22px] focus:outline-none rounded-4xl h-[58px] box-border relative focus:bg-(--primary)/5'
   const inputWrapStyle = type !== 'search' ? "border border-(--secondary-cool) px-6" : "bg-(--secondary-cool) pl-16 pr-8"
   const inputTextAndEmailStyle = (type === 'text' || type === 'email') && 'text-[#7A7A7A]'
   return (
