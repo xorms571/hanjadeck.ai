@@ -26,7 +26,7 @@ export default async function GeneratePage() {
                     <div className="flex flex-col justify-center space-y-6">
                         <div className="space-y-4">
                             <h3 className="text-2xl font-bold">How it Works</h3>
-                            <ul className="list-disc list-inside space-y-2">
+                            <ul className="list-disc list-inside space-y-2 text-sm md:text-lg">
                                 <li>
                                     <span className="font-semibold">Enter a Keyword:</span> Start by typing any Hanja character or a word you want to learn.
                                 </li>

@@ -43,7 +43,6 @@ export const CardFace = ({
         );
     };
 
-
     // Front일 때 opacity-0, Back은 표시
     const hidden = isFront ? "opacity-0" : "";
 
@@ -93,13 +92,20 @@ export const CardFace = ({
                 <ul
                     className={`bg-(--neutrals-white) px-4 py-2 md:px-4 md:py-4 rounded-xl md:rounded-2xl mt-2 md:mt-4 ${hidden}`}
                 >
-                    {examples.map((example, index) => (
-                        <li key={index} className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`}>
-                            {index === 0 && korean ? highlightText(example, korean, "text-(--primary) font-bold")
-                                : index === 1 && english ? highlightText(example, english, "text-(--primary) font-bold")
-                                    : example}
-                        </li>
-                    ))}
+                    {examples.map((example, index) => {
+                        let processedEnglishHighlight = ''; // Initialize an empty string for processed English highlight
+                        if (index === 1 && english) {
+                            processedEnglishHighlight = english.split(/;|,/)[0].trim().replace(/\s/g, ''); // Process the English example
+                        }
+
+                        return (
+                            <li key={index} className={`${index === 0 ? "mb-1.5 md:mb-2.5" : ""}`}>
+                                {index === 0 && korean ? highlightText(example, korean, "text-(--primary) font-bold")
+                                    : index === 1 && english ? highlightText(example, processedEnglishHighlight, "text-(--primary) font-bold")
+                                        : example}
+                            </li>
+                        );
+                    })}
                 </ul>
 
                 {/*{creatorName && (
