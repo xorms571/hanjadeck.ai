@@ -218,14 +218,14 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
 
     const handleUnknown = () => {
         if (!cardRef.current) return;
-        cardRef.current.style.transition = "0.3s ease-out";
+        cardRef.current.style.transition = "1s ease-out";
         cardRef.current.style.transform = "translateX(-1500px)"; // 화면 왼쪽 끝
         handleCardAction(true);
     };
 
     const handleKnown = () => {
         if (!cardRef.current) return;
-        cardRef.current.style.transition = "0.3s ease-out";
+        cardRef.current.style.transition = "1s ease-out";
         cardRef.current.style.transform = "translateX(1500px)"; // 화면 오른쪽 끝
         handleCardAction(false);
     }
