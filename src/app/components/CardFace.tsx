@@ -1,31 +1,26 @@
-import Link from "next/link";
 import Container from "./Container";
-import UserProfilePicture from "./UserProfilePicture";
+import TipSvg from "./TipSvg";
 
 interface props {
     isFront: boolean;
+    showTips: boolean;
     baseContainerStyle: string;
-    createdAt: Date;
-    creatorName: string | null;
-    creatorImage: string | null;
-    targetUserId: string | undefined;
     character: string;
     korean: string;
     english: string;
     examples: string[];
+    handleClick: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export const CardFace = ({
     isFront,
+    showTips,
     baseContainerStyle,
-    createdAt,
-    creatorName,
-    creatorImage,
-    targetUserId,
     character,
     korean,
     english,
     examples,
+    handleClick
 }: props) => {
 
     const highlightText = (text: string, highlightWord: string, className: string) => {
@@ -48,21 +43,20 @@ export const CardFace = ({
         );
     };
 
-    const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        e.preventDefault();
-        e.stopPropagation();
-    };
 
     // Front일 때 opacity-0, Back은 표시
     const hidden = isFront ? "opacity-0" : "";
 
     return (
         <Container
-            className={`${baseContainerStyle} justify-between ${!isFront ? "transform-[rotateY(180deg)]" : ""}`}
+            className={`${baseContainerStyle} justify-between ${!isFront ? "transform-[rotateY(180deg)]" : ""} overflow-hidden`}
             shadow
         >
+            <button className={`${showTips && "text-white!"} z-50 mr-auto text-black hover:text-(--primary) cursor-pointer`} onClick={handleClick}>
+                <TipSvg />
+            </button>
             {/* Top */}
-            <div className="flex justify-between text-end w-full">
+            {/*<div className="flex justify-between text-end w-full">
                 <p className="text-gray-500! text-[14px]! md:text-[18px]!">
                     {createdAt.toLocaleString("en")}
                 </p>
@@ -82,10 +76,10 @@ export const CardFace = ({
                         </div>
                     </div>
                 )}
-            </div>
+            </div>*/}
 
             {/* Middle */}
-            <div className="text-center">
+            <div className="text-center mt-10">
                 <h1 className={character.length > 4 ? "text-[36px]!" : ""}>{character}</h1>
                 <h2 className={`${character.length > 4 ? "text-[36px]!" : ""} ${hidden}`}>
                     {korean}
@@ -109,7 +103,7 @@ export const CardFace = ({
                     ))}
                 </ul>
 
-                {creatorName && (
+                {/*{creatorName && (
                     <div className="flex mt-2 md:hidden text-[14px] text-gray-500 gap-2 z-10 items-end justify-end w-full">
                         Created by{" "}
                         <UserProfilePicture
@@ -123,7 +117,25 @@ export const CardFace = ({
                             </Link>
                         </div>
                     </div>
-                )}
+                )}*/}
+            </div>
+
+            <div className={`${showTips ? "flex" : "hidden"} absolute top-1/2 w-full h-full -translate-y-1/2 p-6 bg-black/50 text-white text-xs md:text-sm left-0 justify-between gap-10`}>
+                <div className={`${isFront && "opacity-0"} flex flex-col justify-center items-start w-30`}>
+                    <div className="w-5 h-7 rounded bg-white fade-left shadow" />
+                    <b className="fade-left">👆</b>
+                    <span>Swipe left<br /> if you’re still learning</span>
+                </div>
+                <div className={`${!isFront && "opacity-0"} text-center flex flex-col justify-center items-center`}>
+                    <div className="flip-box bg-white! shadow animate-bounce" />
+                    <b className="animate-bounce">👆</b>
+                    <span>Tap to flip card</span>
+                </div>
+                <div className={`${isFront && "opacity-0"} flex flex-col justify-center items-end text-right w-30`}>
+                    <div className="w-5 h-7 rounded bg-white fade-right shadow" />
+                    <b className="fade-right">👆</b>
+                    <span>Swipe right<br /> if you already know</span>
+                </div>
             </div>
         </Container>
     );

@@ -217,10 +217,16 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
     };
 
     const handleUnknown = () => {
+        if (!cardRef.current) return;
+        cardRef.current.style.transition = "0.3s ease-out";
+        cardRef.current.style.transform = "translateX(-1500px)"; // 화면 왼쪽 끝
         handleCardAction(true);
     };
 
     const handleKnown = () => {
+        if (!cardRef.current) return;
+        cardRef.current.style.transition = "0.3s ease-out";
+        cardRef.current.style.transform = "translateX(1500px)"; // 화면 오른쪽 끝
         handleCardAction(false);
     }
 
@@ -304,7 +310,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
                     <Image className="opacity-50" src="/logo-lg.svg" alt="logo icon" width={150} height={150} />
                 </Container>
             </div>
-            {showLearningTip && <LearningTip learningTipHandler={learningTipHandler}/>}
+            {/*{showLearningTip && <LearningTip learningTipHandler={learningTipHandler} />}*/}
             <div className="max-w-[536px] mt-[72px] mx-auto hidden md:flex justify-between gap-5! md:gap-14!">
                 <Button
                     onClick={handleUnknown}

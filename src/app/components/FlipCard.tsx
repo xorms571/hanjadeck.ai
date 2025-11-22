@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { CardWithBookmarkStatus } from "@/lib/cards"; // Import the extended Card type
 import { CardFace } from "./CardFace";
+import TipSvg from "./TipSvg";
 
 interface FlipCardProps {
     card: CardWithBookmarkStatus;
@@ -60,8 +61,15 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
         examples,
     }
 
+    const [showTips, setShowTips] = useState(false);
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setShowTips(!showTips);
+    };
+
     return (
-        <div className="perspective-[1000px] w-full max-w-[796px] h-[calc(100vh-180px)] md:h-[515px]">
+        <div className="cardWrapper perspective-[1000px] w-full max-w-[796px] h-[calc(100vh-180px)] md:h-[515px]">
             <div
                 className={`relative w-full h-full transition-transform duration-600 ease-[cubic-bezier(.2,.9,.2,1)] transform-3d ${flipped ? "transform-[rotateY(180deg)]" : ""}`}
                 role="button"
@@ -70,12 +78,15 @@ export default function FlipCard({ card, onBookmarkToggle }: FlipCardProps) {
                 aria-pressed={flipped}
                 onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") setFlipped(v => !v); }}
             >
+
                 {/* Front Face */}
-                <CardFace isFront={true} {...props} />
+                <CardFace handleClick={handleClick} isFront={true} showTips={showTips} {...props} />
 
                 {/* Back Face */}
-                <CardFace isFront={false} {...props} />
+                <CardFace handleClick={handleClick} isFront={false} showTips={showTips} {...props} />
             </div>
+
+
         </div>
     )
 }
