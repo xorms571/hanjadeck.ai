@@ -2,6 +2,7 @@ import { getCards } from "@/lib/cards";
 import FlipCard from "../components/FlipCard";
 import SvgPathAnimationCSS from "../components/Path";
 import Link from "next/link";
+import GeneratePage from "../generate/page";
 
 export default async function IntroPage() {
     const cards = await getCards(undefined);
@@ -47,6 +48,7 @@ export default async function IntroPage() {
                 <SvgPathAnimationCSS strokeWidth={30} color="#E0E0E3" zIndex="-z-35" top="top-20 lg:top-30" className="rotate-175" transition={2.5} />
                 <SvgPathAnimationCSS strokeWidth={10} color="#fff" zIndex="-z-10" top="top-40 lg:top-60" className="-rotate-180" transition={1.5} />
             </div>
+            <GeneratePage/>
         </>
     )
 }
