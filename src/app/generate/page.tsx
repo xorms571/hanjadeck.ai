@@ -1,14 +1,12 @@
 import Link from "next/link";
-import { getCurrentUser } from "@/lib/auth";
 import Generate from "./Generate";
 import FlipCard from "../components/FlipCard";
 import { getCards } from "@/lib/cards";
 import Image from "next/image";
 
 export default async function GeneratePage() {
-    const user = await getCurrentUser();
-    const cards = await getCards(user?.id);
-    const exampleCard = cards.find(card => card.id === 'cmiaf6qg90000gaus0t6atdws') || cards[0];
+    const cards = await getCards(undefined);
+    const exampleCard = cards.find(card => card.id === 'cltofyr3s0000ga1olq3f0b3k') || cards[0];
 
     return (
         <main className="w-full py-12">
@@ -39,7 +37,7 @@ export default async function GeneratePage() {
                             </ul>
                         </div>
                         <div className="mt-6 flex flex-col">
-                            <Generate user={user} />
+                            <Generate />
                         </div>
                     </div>
                     <div className="flex items-center justify-center">

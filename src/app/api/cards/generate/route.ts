@@ -7,7 +7,7 @@ import { cookies } from 'next/headers';
 export async function POST(req: Request) {
     try {
         const session = await getCurrentUser();
-        const { searchTerm, userId } = await req.json();
+        const { searchTerm } = await req.json();
 
         if (!searchTerm || typeof searchTerm !== 'string' || searchTerm.trim().length === 0) {
             return NextResponse.json({ message: 'Invalid search term' }, { status: 400 });
@@ -59,8 +59,8 @@ export async function POST(req: Request) {
             return NextResponse.json(newCard, { status: 201 });
         };
 
-        if (session && userId) {
-            return await generateAndSaveCard(userId);
+        if (session) {
+            return await generateAndSaveCard(session.id);
         } else {
             const cookieStore = await cookies();
             const generationCountCookie = cookieStore.get('generation-count');

@@ -2,16 +2,14 @@
 import { useState } from "react";
 import Input from "../components/Input";
 import { useRouter } from "next/navigation";
-import { User } from "@/lib/auth";
 import Button from "../components/Button";
 
-export default function Generate({ user }: { user: User | null }) {
+export default function Generate() {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-    const userId = user?.id || null;
 
     const handleGenerate = async () => {
         setIsLoading(true);
@@ -23,7 +21,7 @@ export default function Generate({ user }: { user: User | null }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ searchTerm, userId }), // Include userId
+                body: JSON.stringify({ searchTerm }),
             });
 
             const result = await response.json();

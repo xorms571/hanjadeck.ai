@@ -1,13 +1,10 @@
+import { getCards } from "@/lib/cards";
 import FlipCard from "../components/FlipCard";
 import SvgPathAnimationCSS from "../components/Path";
-import { getCards } from "@/lib/cards";
-import { getCurrentUser } from "@/lib/auth";
 import Link from "next/link";
-import GeneratePage from "../generate/page";
 
 export default async function IntroPage() {
-    const user = await getCurrentUser();
-    const cards = await getCards(user?.id);
+    const cards = await getCards(undefined);
     const cardClasses = [
         "w-2xl fade-up0 opacity-0 absolute scale-30 lg:scale-50 rotate-4 -top-10 lg:top-10 -right-40 lg:right-0",
         "w-2xl fade-up1 opacity-0 absolute scale-30 lg:scale-50 rotate-12 top-90 lg:top-130 -left-40 lg:left-0",
@@ -50,7 +47,6 @@ export default async function IntroPage() {
                 <SvgPathAnimationCSS strokeWidth={30} color="#E0E0E3" zIndex="-z-35" top="top-20 lg:top-30" className="rotate-175" transition={2.5} />
                 <SvgPathAnimationCSS strokeWidth={10} color="#fff" zIndex="-z-10" top="top-40 lg:top-60" className="-rotate-180" transition={1.5} />
             </div>
-            <GeneratePage />
         </>
     )
 }

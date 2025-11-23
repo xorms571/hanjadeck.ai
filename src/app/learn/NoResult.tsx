@@ -4,13 +4,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Button from "../components/Button";
-import { User } from "@/lib/auth";
 
-export default function NoResult({ searchTerm, user }: { searchTerm: string, user: User | null }) {
+export default function NoResult({ searchTerm }: { searchTerm: string }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
-    const userId = user?.id || null;
 
     const handleGenerate = async () => {
         setIsLoading(true);
@@ -22,7 +20,7 @@ export default function NoResult({ searchTerm, user }: { searchTerm: string, use
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ searchTerm, userId }), // Include userId
+                body: JSON.stringify({ searchTerm }),
             });
 
             const result = await response.json();

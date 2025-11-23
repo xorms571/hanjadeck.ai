@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 
 export default function BodyStyler() {
   const pathname = usePathname();
-  const body = document.body;
-  const footer = document.querySelector("footer");
   useEffect(() => {
+    const body = document.body;
+    const footer = document.querySelector("footer");
     if (pathname.includes("signup") || pathname.includes("login")) {
       body.classList.add("dark-background");
       footer?.classList.add("dark-background");
