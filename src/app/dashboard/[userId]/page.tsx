@@ -45,14 +45,14 @@ export default async function DashboardPage({ params }: { params: Promise<{ user
                     ) : (
                         <UserProfilePicture imageUrl={targetUser.imageUrl} size={180} /> // Display static image for others
                     )}
-                    <Container className="border-[#D9D9D9] border flex flex-col gap-4">
+                    <Container className="border-[#D9D9D9] p-0! md:p-6! md:border flex flex-col gap-4">
                         <h3>Overall Progress</h3>
                         <OverallProgress user={targetUser} totalCards={totalCards} isCurrentUserDashboard={isCurrentUserDashboard} /> {/* Use targetUser */}
                     </Container>
-                    <Container className="border-[#D9D9D9] border flex flex-col gap-6 w-full">
+                    <Container className="border-[#D9D9D9] p-0! md:p-6! md:border flex flex-col gap-6 w-full">
                         <div className="flex justify-between items-end">
                             <h3 className="text-[22px]!">Review Queue</h3>
-                            <Button type="button" disabled className="disabled:bg-(--primary)! max-w-16! md:max-w-24! max-h-7! md:max-h-[38px]! text-sm! md:text-[18px]! font-bold">
+                            <Button type="button" disabled className="disabled:bg-(--primary)! max-w-fit px-2 max-h-7! md:max-h-[38px]! text-sm! md:text-[18px]! font-bold">
                                 {bookmarkedCards.length} Cards
                             </Button>
                         </div>
