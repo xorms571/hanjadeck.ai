@@ -39,7 +39,7 @@ export default function HeaderClient() {
         };
 
         fetchUser();
-    }, []); // Empty dependency array ensures this runs once on mount
+    }, [pathname]); // Empty dependency array ensures this runs once on mount
 
     const isIntroPageThenHidden = pathname.includes('intro') && "hidden!";
 

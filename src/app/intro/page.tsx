@@ -24,9 +24,9 @@ export default async function IntroPage() {
     const cardIndexes = shuffleArray([...Array(cards.length).keys()]);
     return (
         <>
-            <div className="max-w-2xl w-fit flex items-center gap-12 flex-col m-auto mt-20 mb-[40%] z-150 relative">
+            <div className="max-w-2xl w-fit flex items-center gap-12 flex-col m-auto mt-10 mb-[40%] z-150 relative">
                 <h2 className="text-center text-3xl! lg:text-5xl! leading-10 lg:leading-18">
-                    Introducing <b className="text-(--primary)">hanjadeck.ai</b>,<br />
+                    Introducing <b className="text-(--primary) text-5xl">HanjadeckAI</b>,<br />
                     The fun way to learn<br />
                     vocabulary.
                 </h2>
