@@ -48,7 +48,7 @@ export default function Generate({ user }: { user: User | null }) {
     return (
         <>
             <Input backgroundColor="bg-white" placeholder="Typing any word you want to learn" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-            <Button onClick={handleGenerate} disabled={isLoading}>
+            <Button className="w-full!" onClick={handleGenerate} disabled={isLoading}>
                 {isLoading ? 'Generating...' : 'Generate New Flashcard'}
             </Button>
             {error && (

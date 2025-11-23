@@ -18,11 +18,10 @@ export default function HeaderClient({ user }: { user: User | null }) {
     }, [pathname]);
 
     const isIntroPageThenHidden = pathname.includes('intro') && "hidden!";
-    const isUserLoggedInThenDashboardOrIntro = user ? `/dashboard/${user.id}` : "/login";
 
     return (
-        <header className={`${isMenuOpen?"":"backdrop-blur-md"} w-full z-152 flex justify-between items-center font-bold]`}>
-            <Link className="z-152" href={isUserLoggedInThenDashboardOrIntro}>
+        <header className={`${isMenuOpen?"":"backdrop-blur-md"} max-w-[1228px] m-auto z-152 flex justify-between items-center font-bold] p-6`}>
+            <Link className="z-152" href='/intro'>
                 <Image src='/logo-lg.svg' width={185} height={40} alt="logo" />
             </Link>
 
