@@ -5,15 +5,18 @@ import { usePathname } from "next/navigation";
 
 export default function BodyStyler() {
   const pathname = usePathname();
-
+  const body = document.body;
+  const footer = document.querySelector("footer");
   useEffect(() => {
     if (pathname.includes("signup") || pathname.includes("login")) {
-      document.body.classList.add("dark-background");
+      body.classList.add("dark-background");
+      footer?.classList.add("dark-background");
     } else if (pathname.includes("learn/")) {
-      document.body.classList.add("learn-background");
+      body.classList.add("learn-background");
     } else {
-      document.body.classList.remove("dark-background");
-      document.body.classList.remove("learn-background");
+      body.classList.remove("dark-background");
+      footer?.classList.remove("dark-background");
+      body.classList.remove("learn-background");
     }
   }, [pathname]);
 

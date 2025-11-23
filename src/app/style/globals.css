@@ -34,15 +34,12 @@ body {
   font-weight: medium;
 }
 
-body.dark-background {
+.dark-background {
   background: #2b1751;
 }
 
 body.learn-background {
   height: 100vh;
-}
-body.learn-background main {
-  padding-top: 88px;
 }
 
 @media (width<=1219px) {

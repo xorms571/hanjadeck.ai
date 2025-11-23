@@ -36,7 +36,7 @@ export default async function IntroPage() {
                     Start Learning
                 </Link>
             </div>
-            <div className="w-full min-h-screen overflow-hidden top-0 z-0 absolute left-0">
+            <div className="w-full h-full overflow-hidden top-0 z-0 absolute left-0">
                 <div className="hidden md:block">
                     {cardClasses.map((className, index) => {
                         return (

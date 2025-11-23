@@ -38,7 +38,7 @@ export default async function GeneratePage() {
                                 </li>
                             </ul>
                         </div>
-                        <div className="mt-6">
+                        <div className="mt-6 flex flex-col">
                             <Generate user={user} />
                         </div>
                     </div>

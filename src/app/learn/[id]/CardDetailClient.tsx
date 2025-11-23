@@ -246,7 +246,7 @@ export default function CardDetailClient({ card, totalCards, allCardIds, user }:
     }
 
     return (
-        <div className="max-w-md lg:max-w-[796px] mx-auto">
+        <div className="max-w-md lg:max-w-[796px] mx-auto mb-20 md:mb-0">
             <ProcessBar background="secondary" number={progressPercentage} />
             <div className="flex justify-between items-center">
                 <div className="flex">

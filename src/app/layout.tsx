@@ -27,7 +27,7 @@ export default function RootLayout({
       >
         <BodyStyler />
         <Header />
-        <main className="mt-5 mb-0 md:mt-10 md:mb-10 max-w-[1228px] m-auto p-6">{children}</main>
+        <main className="mb-0 md:mt-10 md:mb-10 max-w-[1228px] m-auto p-6">{children}</main>
         <Footer />
       </body>
     </html>
