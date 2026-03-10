@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default async function GeneratePage() {
     const cards = await getCards(undefined);
-    const exampleCard = cards.find(card => card.id === 'cmiaf6qg90000gaus0t6atdws') || cards[0];
+    const exampleCard = cards.find(card => card.korean === '예시') || cards[0];
 
     return (
         <main className="w-full py-12">
