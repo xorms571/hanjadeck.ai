@@ -1,0 +1,9 @@
+f9F6G5D7CGYlRexW
+postgresql://postgres:[YOUR_PASSWORD]@db.chibakzkmblulhhkvtxu.supabase.co:5432/postgres
+
+DATABASE_URL="postgresql://postgres:f9F6G5D7CGYlRexW@db.chibakzkmblulhhkvtxu.supabase.co:5432/postgres?sslmode=require"
+# Connect to Supabase via connection pooling
+DATABASE_URL="postgresql://postgres.chibakzkmblulhhkvtxu:f9F6G5D7CGYlRexW@aws-1-us-east-2.pooler.supabase.com:6543/postgres?pgbouncer=true"
+
+# Direct connection to the database. Used for migrations
+DIRECT_URL="postgresql://postgres.chibakzkmblulhhkvtxu:f9F6G5D7CGYlRexW@aws-1-us-east-2.pooler.supabase.com:5432/postgres"
